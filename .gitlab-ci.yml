@@ -43,8 +43,16 @@ assembleDebug:
   artifacts:
     paths:
       - app/build/outputs/
+      - app-koin/build/outputs/
 
 debugTests:
   stage: test
   script:
-    - ./gradlew -Pci --console=plain :app:testDebug
+    - ./gradlew -Pci --console=plain testDebug
+  artifacts:
+    name: "reports_${CI_PROJECT_NAME}_${CI_BUILD_REF_NAME}"
+    when: always
+    expire_in: 4 days
+    paths:
+      - app/build/reports/tests/
+      - app-koin/build/reports/tests/
