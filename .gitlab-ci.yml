@@ -51,7 +51,7 @@ debugTests:
     - ./gradlew -Pci --console=plain testDebug
   artifacts:
     reports:
-      junit: app/build/reports/test-results/
+      junit: [ app/build/reports/test-results/*/*.xml, app-koin/build/reports/test-results/*/*.xml ]
     name: "reports_${CI_PROJECT_NAME}_${CI_BUILD_REF_NAME}"
     when: always
     expire_in: 4 days
