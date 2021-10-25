@@ -37,8 +37,6 @@ stages:
   - test
 
 assembleDebugWithSlack:
-  tags:
-    - android
   stage: build
   script: 
     - ./gradlew assembleDebug
@@ -62,15 +60,11 @@ assembleDebugWithSlack:
       - app-koin/build/reports/tests/
 
 lintDebug:
-  tags:
-    - android
   stage: build
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
 
 assembleDebug:
-  tags:
-    - android
   stage: build
   script:
     - ./gradlew assembleDebug
@@ -80,8 +74,6 @@ assembleDebug:
       - app-koin/build/outputs/
 
 debugTests:
-  tags:
-    - android
   stage: test
   script:
     - ./gradlew -Pci --console=plain testDebug
