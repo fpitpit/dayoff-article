@@ -1,0 +1,124 @@
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+project.afterEvaluate {
+    // Grab all build types and product flavors
+    def buildTypes = android.buildTypes.collect { type ->
+        type.name
+    }
+    def productFlavors = android.productFlavors.collect { flavor ->
+        flavor.name
+    }
+    // When no product flavors defined, use empty
+    if (!productFlavors) productFlavors.add('')
+
+    //iterate over the flavors
+
+    productFlavors.each {
+
+        productFlavorName ->
+//iterate over build types like debug,release,prod etc.
+            buildTypes.each {
+
+                buildTypeName ->
+                    //sourceName — e.g. freeDebug ,sourcePath — e.g. free/debug
+                    def sourceName, sourcePath
+                    if (!productFlavorName) {
+                        sourceName = sourcePath = "${buildTypeName}"
+                    } else {
+                        sourceName = "${productFlavorName}${buildTypeName.capitalize()}"
+                        sourcePath = "${productFlavorName}/${buildTypeName}"
+                    }
+                    // testTaskName —  e.g. testFreeDebugtest task that the coverage task depends on,
+                    def testTaskName = "test${sourceName.capitalize()}UnitTest"
+                    // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
+                    task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: "$testTaskName") {
+                        group = "Reporting"
+                        description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
+                        //classesDirectories = fileTree(
+                        //        dir: "${project.buildDir}/intermediates/classes/${sourcePath}",
+                        //        excludes: [
+                        //                '**/R.class',
+                        //                '**/R$*.class',
+                        //                '**/*$ViewInjector*.*',
+                        //                '**/*$ViewBinder*.*',
+                        //                '**/BuildConfig.*',
+                        //                '**/Manifest*.*'
+                        //        ]
+                        //)
+                        def excludes = [
+                                // data binding
+                                "android/databinding/**/*.class",
+                                "**/android/databinding/*Binding.class",
+                                "**/android/databinding/*",
+                                "**/androidx/databinding/*",
+                                "**/BR.*",
+                                // android
+                                "**/R.class",
+                                "**/R\$*.class",
+                                "**/BuildConfig.*",
+                                "**/Manifest*.*",
+                                "**/*Test*.*",
+                                "android/**/*.*",
+                                // butterKnife
+                                "**/*\$ViewInjector*.*",
+                                "**/*\$ViewBinder*.*",
+                                // dagger
+                                "**/*_MembersInjector.class",
+                                "**/Dagger*Component.class",
+                                "**/Dagger*Component\$Builder.class",
+                                "**/*Module_*Factory.class",
+                                "**/di/module/*",
+                                "**/*_Factory*.*",
+                                "**/*Module*.*",
+                                "**/*Dagger*.*",
+                                "**/*Hilt*.*",
+                                // kotlin
+                                "**/*MapperImpl*.*",
+                                "**/*\$ViewInjector*.*",
+                                "**/*\$ViewBinder*.*",
+                                "**/BuildConfig.*",
+                                "**/*Component*.*",
+                                "**/*BR*.*",
+                                "**/Manifest*.*",
+                                "**/*\$Lambda\$*.*",
+                                "**/*Companion*.*",
+                                "**/*Module*.*",
+                                "**/*Dagger*.*",
+                                "**/*Hilt*.*",
+                                "**/*MembersInjector*.*",
+                                "**/*_MembersInjector.class",
+                                "**/*_Factory*.*",
+                                "**/*_Provide*Factory*.*",
+                                "**/*Extensions*.*",
+                                // sealed and data classes
+                                "**/*\$Result.*",
+                                "**/*\$Result\$*.*"
+                        ]
+                        def javaClasses = fileTree(dir: "${project.buildDir}/intermediates/classes/${sourcePath}",
+                                excludes: excludes)
+                        def kotlinClasses = fileTree(dir: "${buildDir}/tmp/kotlin-classes/${sourcePath}",
+                                excludes: excludes)
+                        classDirectories.setFrom(files([
+                                javaClasses,
+                                kotlinClasses
+                        ]))
+                        def coverageSourceDirs = [
+                                "src/main/java",
+                                "src/$productFlavorName/java",
+                                "src/$buildTypeName/java"
+                        ]
+                        additionalSourceDirs.setFrom(files(coverageSourceDirs))
+                        sourceDirectories.setFrom(files(coverageSourceDirs))
+                        executionData.setFrom(files("${project.buildDir}/jacoco/${testTaskName}.exec"))
+                        reports {
+                            //enables and disable the type of file you need
+                            xml.enabled = true
+                            html.enabled = true
+                            html.destination = file("${buildDir}/reports/jacoco/html")
+                        }
+                    }
+            }
+    }
+}
