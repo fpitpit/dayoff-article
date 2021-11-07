@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">dayoff</string>
+    <string name="title_dayofffeature">Day off Feature</string>
 </resources>
