@@ -4,13 +4,14 @@ import fr.pitdev.dayoff.common.base.utils.CONNECT_EXCEPTION
 import fr.pitdev.dayoff.data.dtos.DayOffDto
 import fr.pitdev.dayoff.data.dtos.ZoneDto
 import fr.pitdev.dayoff.data.remote.api.DayOffApiService
+import fr.pitdev.dayoff.data.utils.NetworkStatus
 import io.mockk.coEvery
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import okhttp3.internal.EMPTY_RESPONSE
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import retrofit2.Response
 import java.net.ConnectException
@@ -29,8 +30,8 @@ class DayOffRemoteDataSourceImplTest {
         val dayOffRemoteDataSourceImpl =
             DayOffRemoteDataSourceImpl(dayOffApiService = dayOffApiService)
         val result = dayOffRemoteDataSourceImpl.getAll(ZoneDto.METROPOLE)
-        assertNotNull(result)
-        assertEquals("fête nationale", result.data?.dates?.get("2021-07-14"))
+        assertNotNull(result as NetworkStatus.Success)
+        assertEquals("fête nationale", result.data.dates["2021-07-14"])
     }
 
     @ExperimentalCoroutinesApi
@@ -45,7 +46,7 @@ class DayOffRemoteDataSourceImplTest {
         val dayOffRemoteDataSourceImpl =
             DayOffRemoteDataSourceImpl(dayOffApiService = dayOffApiService)
         val result = dayOffRemoteDataSourceImpl.getAll(ZoneDto.METROPOLE)
-        assertNotNull(result)
+        assertNotNull(result as NetworkStatus.Error)
         assertEquals("Response.error()", result.errorMessage)
     }
 
@@ -64,7 +65,7 @@ class DayOffRemoteDataSourceImplTest {
             val dayOffRemoteDataSourceImpl =
                 DayOffRemoteDataSourceImpl(dayOffApiService = dayOffApiService)
             val result = dayOffRemoteDataSourceImpl.getAll(ZoneDto.METROPOLE)
-            assertNotNull(result)
+            assertNotNull(result as NetworkStatus.Error)
             assertEquals(CONNECT_EXCEPTION, result.errorMessage)
         }
 }
