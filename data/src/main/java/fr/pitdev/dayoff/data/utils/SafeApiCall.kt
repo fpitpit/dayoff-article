@@ -13,7 +13,7 @@ suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): NetworkStatu
         val response = call.invoke()
         if (response.isSuccessful) {
             response.body()?.let {
-                return NetworkStatus.Success(response.body())
+                return NetworkStatus.Success(it)
             }
         }
         return NetworkStatus.Error(response.message())
