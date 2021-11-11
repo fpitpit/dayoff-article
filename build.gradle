@@ -1,16 +1,27 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.hilt_version = '2.40'
+    ext {
+        kotlin_version = "1.5.31"
+        nav_version = "2.3.1"
+        room_version = '2.3.0'
+        hilt_version = '2.40'
+        kover_version = '0.4.1'
+        gradle_plugin_version = '7.0.3'
+        jacoco_version = '0.8.7'
+        robolectric_version = '4.6.1'
+
+    }
+
 
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.3"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "com.android.tools.build:gradle:$gradle_plugin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
-        classpath "org.jetbrains.kotlinx:kover:0.4.1"
+        classpath "org.jetbrains.kotlinx:kover:$kover_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -27,7 +38,7 @@ kover {
     enabled = true                          // false to disable instrumentation of all test tasks in all modules
     coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) // change instrumentation agent and reporter
     intellijEngineVersion.set('1.0.614')    // change version of IntelliJ agent and reporter
-    jacocoEngineVersion.set('0.8.7')        // change version of JaCoCo agent and reporter
+    jacocoEngineVersion.set("$jacoco_version")        // change version of JaCoCo agent and reporter
     generateReportOnCheck.set(false)         // false to do not execute `koverReport` task before `check` task
 }
 

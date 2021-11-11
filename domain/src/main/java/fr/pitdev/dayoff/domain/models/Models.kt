@@ -21,5 +21,7 @@ enum class Zone(name: String) {
 }
 
 @Keep
-data class DayOff(val date: LocalDate, val name: String)
+data class DayOff(val zone: Zone, val date: LocalDate, val name: String)
+
+
 
