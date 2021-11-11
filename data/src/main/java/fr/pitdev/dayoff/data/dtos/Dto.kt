@@ -1,24 +1,23 @@
 package fr.pitdev.dayoff.data.dtos
 
 import androidx.annotation.Keep
-import com.google.gson.Gson
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-enum class ZoneDto(val zoneName: String) {
+enum class ZoneDto(name: String) {
     ALSACE_MOSELLE("alsace-moselle"),
-    GUADELOUPE("guadelooupe"),
+    GUADELOUPE(name = "guadelooupe"),
     GUYANE("guyane"),
-    LA_REUNION("la-reunion"),
-    MARTINIQUE("martinique"),
+    LA_REUNION(name = "la-reunion"),
+    MARTINIQUE(name = "martinique"),
     MAYOTTE("mayotte"),
     METROPOLE("metropole"),
     NOUVELLE_CALEDONIE("nouvelle-caledonie"),
     POLYNESIE_FRANCAISE("polynesie-francaise"),
-    SAINT_BARTHELEMY("saint-barthelemy"),
+    SAINT_BARTHELEMY(name = "saint-barthelemy"),
     SAINT_MARTIN("saint-martin"),
     SAINT_PIERRE_ET_MIQUELON("saint-pierre-et-miquelon"),
     WALLIS_ET_FUTUNA("wallis-et-futuna"),
@@ -33,8 +32,8 @@ fun DayOffDto.toDomain(zoneDto: ZoneDto): List<DayOff> {
     return dates.map {
         DayOff(
             zone = zoneDto.toDomain(),
-            date =  LocalDate.parse(it.key),
-            name = it.value
+            LocalDate.parse(it.key, DateTimeFormatter.BASIC_ISO_DATE),
+            it.value
         )
     }
 }
