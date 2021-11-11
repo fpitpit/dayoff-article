@@ -12,6 +12,7 @@ import fr.pitdev.dayoff.data.remote.api.DayOffApiService
 import fr.pitdev.dayoff.data.remote.datasource.DayOffRemoteDataSource
 import fr.pitdev.dayoff.data.remote.datasource.DayOffRemoteDataSourceImpl
 import fr.pitdev.dayoff.data.room.entities.DayOffDao
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
