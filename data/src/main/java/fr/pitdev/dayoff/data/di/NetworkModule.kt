@@ -31,7 +31,6 @@ object NetworkModule {
 
 
     @Provides
-    @Singleton
     fun providesLoggingInterceptor(): HttpLoggingInterceptorLevel =
         DefaultHttpLoggingInterceptorLevel()
 
@@ -65,25 +64,20 @@ object NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
     @Provides
-    @Singleton
     fun provideGson(): Gson = GsonBuilder().create()
 
     @Provides
-    @Singleton
     @ConverterFactoryGson
     fun provideGsonFactory(gson: Gson): Converter.Factory = GsonConverterFactory.create(gson)
 
     @Provides
-    @Singleton
     @ConverterFactoryMoshi
     fun provideMoshiFactory(moshi: Moshi): Converter.Factory = MoshiConverterFactory.create(moshi)
 
     @Provides
-    @Singleton
     fun provideRetrofit(
         @ConverterFactoryMoshi convertFactory: Converter.Factory,
         okHttpClient: OkHttpClient

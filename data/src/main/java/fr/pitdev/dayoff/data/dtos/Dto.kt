@@ -28,9 +28,13 @@ data class DayOffDto(val dates: Map<String, String>)
 
 fun ZoneDto.toDomain(): Zone = Zone.valueOf(name)
 
-fun DayOffDto.toDomain(): List<DayOff> {
+fun DayOffDto.toDomain(zoneDto: ZoneDto): List<DayOff> {
     return dates.map {
-        DayOff(LocalDate.parse(it.key, DateTimeFormatter.BASIC_ISO_DATE), it.value)
+        DayOff(
+            zone = zoneDto.toDomain(),
+            LocalDate.parse(it.key, DateTimeFormatter.BASIC_ISO_DATE),
+            it.value
+        )
     }
 }
 
