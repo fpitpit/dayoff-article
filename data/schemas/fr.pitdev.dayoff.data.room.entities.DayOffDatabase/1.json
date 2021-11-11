@@ -1,0 +1,69 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "26d2e3018bc7d4c5164262953dcb71e8",
+    "entities": [
+      {
+        "tableName": "day_off",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `day_off_year` INTEGER NOT NULL, `day_off_zone` TEXT NOT NULL, `day_off_date` TEXT NOT NULL, `day_off_name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "year",
+            "columnName": "day_off_year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zone",
+            "columnName": "day_off_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateDayOff",
+            "columnName": "day_off_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "day_off_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "day_off_CHK1",
+            "unique": true,
+            "columnNames": [
+              "day_off_year",
+              "day_off_zone",
+              "day_off_date"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `day_off_CHK1` ON `${TABLE_NAME}` (`day_off_year`, `day_off_zone`, `day_off_date`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '26d2e3018bc7d4c5164262953dcb71e8')"
+    ]
+  }
+}
