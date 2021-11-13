@@ -20,6 +20,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
@@ -84,6 +85,7 @@ object NetworkModule {
     ): Retrofit {
         return Retrofit.Builder().baseUrl(BASE_URL)
             .client(okHttpClient)
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(convertFactory)
             .build()
     }

@@ -1,6 +1,7 @@
 package fr.pitdev.dayoff.data.utils
 
-import fr.pitdev.dayoff.common.base.utils.UNKNOWN_NETWORK_EXCEPTION
+import fr.pitdev.dayoff.common.utils.network.NetworkStatus
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 
 inline fun <ResultType, RequestType> networkBoundResource(
@@ -10,33 +11,29 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline clearData: suspend () -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { Unit },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
-    crossinline shouldClear: (RequestType, ResultType) -> Boolean = { _: RequestType, _: ResultType -> false }
-
+    crossinline shouldClear: (RequestType, ResultType) -> Boolean = { _: RequestType, _: ResultType -> false },
+    coroutineDispatcher: CoroutineDispatcher
 ) = flow<NetworkStatus<ResultType>> {
-    emit(NetworkStatus.Loading)
     val dbData = query().first()
-    val flow = if (shouldFetch(dbData)) {
-        kotlin.runCatching {
-            val fetchData = fetch()
-            if (shouldClear(fetchData, dbData)) {
-                clearData()
-            }
+    if (shouldFetch(dbData)) {
+        val fetchData = fetch()
+        if (shouldClear(fetchData, dbData)) {
+            clearData()
+        }
+        if (fetchData is NetworkStatus.Error) {
+            fetchData.throwable?.let { throw it }
+        } else {
             saveFetchResult(fetchData)
-            query().map { NetworkStatus.Success(it) }
-        }.onFailure { error ->
-            onFetchFailed(error)
-            query().map { NetworkStatus.Error(error.localizedMessage, error) }
-        }.getOrDefault(flow { NetworkStatus.Error(UNKNOWN_NETWORK_EXCEPTION) })
+        }
+        val updatedData = query().first()
+        emit(NetworkStatus.Success(updatedData))
     } else {
-        query().map { NetworkStatus.Success(it) }
+        emit(NetworkStatus.Success(dbData))
     }
-    emitAll(flow)
-}
+}.onStart {
+    emit(NetworkStatus.Loading)
+}.catch {
+    onFetchFailed(it)
+    emit(NetworkStatus.Error(throwable = it, errorMessage = it.message))
+}.flowOn(coroutineDispatcher)
 
-sealed class NetworkStatus<out T> {
-    data class Success<out T>(val data: T) : NetworkStatus<T>()
-    data class Error(val errorMessage: String? = null, val throwable: Throwable? = null) :
-        NetworkStatus<Nothing>()
-
-    object Loading : NetworkStatus<Nothing>()
-}

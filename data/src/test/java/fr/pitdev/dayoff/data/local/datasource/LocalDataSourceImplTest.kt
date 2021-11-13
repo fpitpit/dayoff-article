@@ -1,43 +1,35 @@
 package fr.pitdev.dayoff.data.local.datasource
 
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
-import dagger.hilt.android.testing.UninstallModules
-import fr.pitdev.dayoff.data.di.DatabaseModule
+import fr.pitdev.dayoff.data.HiltTest
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltAndroidTest
-@Config(application = HiltTestApplication::class, sdk = [30], manifest = Config.NONE)
-@RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@UninstallModules(DatabaseModule::class)
-class LocalDataSourceImplTest {
+class LocalDataSourceImplTest : HiltTest() {
+
+
     private val dayOff11NovMet = DayOff(
+        id = 1,
         zone = Zone.METROPOLE,
         date = LocalDate.parse("2021-11-11"),
         name = "Armistice"
     )
     private val dayOff11NovAlsMos = DayOff(
+        id = 2,
         zone = Zone.ALSACE_MOSELLE,
         date = LocalDate.parse("2021-11-11"),
         name = "Armistice"
     )
     private val dayOff11NovAlsMos2020 = DayOff(
+        id = 3,
         zone = Zone.ALSACE_MOSELLE,
         date = LocalDate.parse("2020-11-11"),
         name = "Armistice"
@@ -47,15 +39,6 @@ class LocalDataSourceImplTest {
         dayOff11NovAlsMos,
         dayOff11NovAlsMos2020
     )
-
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
-
-
-    @Before
-    fun setUp() {
-        hiltRule.inject()
-    }
 
 
     @Inject
