@@ -37,7 +37,8 @@ class DayOffRepositoryImpl(
         zone: Zone,
         year: Int
     ) = withContext(dispatchProvider.io()) {
-        return@withContext remoteDataSource.getAll(zone.toDto(), year)
+        val result = remoteDataSource.getAll(zone.toDto(), year)
+        return@withContext result
     }
 
     private suspend fun saveData(
