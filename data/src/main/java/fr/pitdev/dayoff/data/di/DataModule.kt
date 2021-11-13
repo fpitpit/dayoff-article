@@ -78,12 +78,6 @@ object RemoteSourceModule {
     fun provideRemoteDataSource(apiService: DayOffApiService): DayOffRemoteDataSource {
         return DayOffRemoteDataSourceImpl(apiService)
     }
-
-    @Provides
-    fun provideLocalDataSourceInFile(dayOffDao: DayOffDao): LocalDataSource {
-        return LocalDataSourceImpl(dayOffDao)
-    }
-
 }
 
 
