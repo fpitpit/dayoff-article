@@ -3,6 +3,7 @@ package fr.pitdev.dayoff.data.repository
 import android.util.Log
 import fr.pitdev.dayoff.common.coroutines.CoroutineDispatcherProvider
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
+import fr.pitdev.dayoff.data.coroutines.DispatchProvider
 import fr.pitdev.dayoff.data.dtos.DayOffDto
 import fr.pitdev.dayoff.data.dtos.toDomain
 import fr.pitdev.dayoff.data.dtos.toDto
