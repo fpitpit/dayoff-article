@@ -36,5 +36,5 @@ fun DayOff.toEntity(): DayOffEntity {
 }
 
 fun DayOffEntity.toDomain(): DayOff {
-    return DayOff(zone = this.zone, date = this.dateDayOff, name = this.name)
+    return DayOff(id= id, zone = this.zone, date = this.dateDayOff, name = this.name)
 }
