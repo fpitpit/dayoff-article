@@ -1,4 +1,4 @@
-package fr.pitdev.dayoff.common
+package fr.pitdev.dayoff.domain
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
