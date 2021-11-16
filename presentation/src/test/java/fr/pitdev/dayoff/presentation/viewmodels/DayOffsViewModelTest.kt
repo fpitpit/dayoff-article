@@ -1,10 +1,10 @@
-package fr.pitdev.dayoff.presentation
+package fr.pitdev.dayoff.presentation.viewmodels
 
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import fr.pitdev.dayoff.domain.usecases.dayoffs.GetDayOffsUseCase
-import fr.pitdev.dayoff.presentation.viewmodels.DayOffsViewModel
+import fr.pitdev.dayoff.presentation.BaseTest
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
