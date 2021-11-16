@@ -1,9 +1,12 @@
-package fr.pitdev.dayoff.domain
+package fr.pitdev.dayoff.presentation
 
+import androidx.annotation.CallSuper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestRule
+
 
 abstract class BaseTest {
 
@@ -13,6 +16,4 @@ abstract class BaseTest {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
-
-
 }
