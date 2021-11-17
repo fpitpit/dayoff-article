@@ -1,6 +1,7 @@
 package fr.pitdev.dayoff.data.repository
 
 import android.util.Log
+import fr.pitdev.dayoff.common.coroutines.CoroutineDispatcherProvider
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import fr.pitdev.dayoff.data.dtos.DayOffDto
 import fr.pitdev.dayoff.data.dtos.toDomain
@@ -8,15 +9,15 @@ import fr.pitdev.dayoff.data.dtos.toDto
 import fr.pitdev.dayoff.data.local.datasource.LocalDataSource
 import fr.pitdev.dayoff.data.remote.datasource.DayOffRemoteDataSource
 import fr.pitdev.dayoff.data.utils.networkBoundResource
-import fr.pitdev.dayoff.domain.coroutines.DispatchProvider
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import fr.pitdev.dayoff.domain.repository.DayOffRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class DayOffRepositoryImpl(
-    private val dispatchProvider: DispatchProvider,
+    private val dispatchProvider: CoroutineDispatcherProvider,
     private val remoteDataSource: DayOffRemoteDataSource,
     private val localDataSource: LocalDataSource
 ) : DayOffRepository {
@@ -29,14 +30,14 @@ class DayOffRepositoryImpl(
                 saveData(response, zone)
             },
             clearData = {},
-            coroutineDispatcher = dispatchProvider.io()
+            coroutineDispatcher = dispatchProvider.io
         )
     }
 
     private suspend fun fetchRemoteData(
         zone: Zone,
         year: Int
-    ) = withContext(dispatchProvider.io()) {
+    ) = withContext(dispatchProvider.io) {
         return@withContext remoteDataSource.getAll(zone.toDto(), year)
     }
 

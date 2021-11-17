@@ -1,7 +1,9 @@
 package fr.pitdev.dayoff.presentation.viewmodels
 
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import fr.pitdev.dayoff.common.coroutines.TestCoroutineDispatcherProvider
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import fr.pitdev.dayoff.domain.usecases.dayoffs.GetDayOffsUseCase
 import fr.pitdev.dayoff.presentation.BaseTest
@@ -20,16 +22,19 @@ import org.junit.runner.RunWith
 class DayOffsViewModelTest : BaseTest() {
 
     lateinit var dayOffsViewModel: DayOffsViewModel
+
     var getDayOffsUseCase: GetDayOffsUseCase = mockk()
 
     @Before
     fun setUp() {
-        dayOffsViewModel = DayOffsViewModel(getDayOffsUseCase)
+
     }
 
     @ExperimentalCoroutinesApi
     @Test
     fun testViewModel() = testRule.runBlockingTest {
+        val dispatcherProvider = TestCoroutineDispatcherProvider()
+        val savedStateHandle = SavedStateHandle()
 
         coEvery {
             getDayOffsUseCase.invoke(
@@ -37,6 +42,8 @@ class DayOffsViewModelTest : BaseTest() {
                 any()
             )
         } returns flow { emit(NetworkStatus.Loading) }
+        dayOffsViewModel =
+            DayOffsViewModel(savedStateHandle, getDayOffsUseCase, dispatchProvider = dispatcherProvider)
         val result = dayOffsViewModel.getDayOffs().toList()
         assertTrue(result.contains(NetworkStatus.Loading))
     }
