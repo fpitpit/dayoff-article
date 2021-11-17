@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fr.pitdev.dayoff.common.coroutines.CoroutineDispatcherProvider
 import fr.pitdev.dayoff.data.local.datasource.LocalDataSource
 import fr.pitdev.dayoff.data.local.datasource.LocalDataSourceImpl
 import fr.pitdev.dayoff.data.remote.api.DayOffApiService
@@ -11,7 +12,6 @@ import fr.pitdev.dayoff.data.remote.datasource.DayOffRemoteDataSource
 import fr.pitdev.dayoff.data.remote.datasource.DayOffRemoteDataSourceImpl
 import fr.pitdev.dayoff.data.repository.DayOffRepositoryImpl
 import fr.pitdev.dayoff.data.room.entities.DayOffDao
-import fr.pitdev.dayoff.domain.coroutines.DispatchProvider
 import fr.pitdev.dayoff.domain.repository.DayOffRepository
 import javax.inject.Singleton
 
@@ -28,7 +28,7 @@ object DataModule {
     @Provides
     @Singleton
     fun provideDayOffRepository(
-        dispatchProvider: DispatchProvider,
+        dispatchProvider: CoroutineDispatcherProvider,
         remoteDataSource: DayOffRemoteDataSource,
         localDataSource: LocalDataSource
     ): DayOffRepository {
