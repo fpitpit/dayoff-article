@@ -35,39 +35,6 @@ object DataModule {
     fun provideLocalDataSourceInFile(dayOffDao: DayOffDao): LocalDataSource {
         return LocalDataSourceImpl(dayOffDao)
     }
-
-    @Provides
-    @Singleton
-    fun provideDayOffRepository(
-        dispatchProvider: CoroutineDispatcherProvider,
-        remoteDataSource: DayOffRemoteDataSource,
-        localDataSource: LocalDataSource
-    ): DayOffRepository {
-        return DayOffRepositoryImpl(dispatchProvider, remoteDataSource, localDataSource)
-    }
-
-}
-
-@InstallIn(SingletonComponent::class)
-@Module
-object RemoteSourceModule {
-    @Provides
-    @Singleton
-    fun provideRemoteDataSource(apiService: DayOffApiService): DayOffRemoteDataSource {
-        return DayOffRemoteDataSourceImpl(apiService)
-    }
-}
-
-    @Provides
-    @Singleton
-    fun provideDayOffRepository(
-        dispatchProvider: CoroutineDispatcherProvider,
-        remoteDataSource: DayOffRemoteDataSource,
-        localDataSource: LocalDataSource
-    ): DayOffRepository {
-        return DayOffRepositoryImpl(dispatchProvider, remoteDataSource, localDataSource)
-    }
-
 }
 
 @InstallIn(SingletonComponent::class)
