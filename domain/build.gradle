@@ -13,8 +13,6 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -33,35 +31,36 @@ android {
     }
     kotlinOptions {
         jvmTarget = '11'
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
     kapt {
         correctErrorTypes true
     }
-    lintOptions {
-        checkDependencies true
-    }
 
     testOptions {
         unitTests {
             includeAndroidResources = true
-            returnDefaultValues = true
-            all { unitTest ->
-                if (name == "testReleaseUnitTest") {
+            all {
+                if (it.name == "testDebugUnitTest") {
                     kover {
-                        enabled = false
-                    }
-                }
-                if (name == "testDebugUnitTest") {
-                    kover {
-                        enabled = true
-                        binaryReportFile.set(file("$buildDir/kover/debug-report.bin"))
-                        includes = ['fr.pitdev.dayoff.*']
+                        disabled = false
+                        binaryReportFile.set(file("$buildDir/custom/debug-report.bin"))
+                        includes = ["fr.pitdev.dayoff.domain.*"]
                         excludes = project.koverExcludes
+                    }
+
+                }
+                if (it.name == "testReleaseUnitTest") {
+                    kover {
+                        disabled = true
                     }
                 }
             }
         }
+    }
+    lint {
+        checkDependencies true
     }
 }
 
@@ -71,24 +70,24 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1-native-mt'
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     testImplementation 'junit:junit:4.13.2'
 
-    testImplementation 'io.mockk:mockk:1.12.0'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt'
+    testImplementation 'io.mockk:mockk:1.12.3'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1-native-mt'
 
     // For Robolectric tests.
-    testImplementation 'com.google.dagger:hilt-android-testing:2.40.1'
+    testImplementation 'com.google.dagger:hilt-android-testing:2.41'
     // ...with Kotlin.
-    kaptTest 'com.google.dagger:hilt-android-compiler:2.40.1'
+    kaptTest 'com.google.dagger:hilt-android-compiler:2.41'
 
     testImplementation "org.robolectric:robolectric:$robolectric_version"
 

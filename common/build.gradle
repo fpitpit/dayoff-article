@@ -13,8 +13,6 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -32,20 +30,25 @@ android {
     }
     kotlinOptions {
         jvmTarget = '11'
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
     testOptions {
-        unitTests.all { unitTest ->
-            if (name == "testReleaseUnitTest") {
-                kover {
-                    enabled = false
+        unitTests {
+            includeAndroidResources = true
+            all {
+                if (it.name == "testDebugUnitTest") {
+                    kover {
+                        disabled = false
+                        binaryReportFile.set(file("$buildDir/custom/debug-report.bin"))
+                        includes = ["fr.pitdev.dayoff.common.*"]
+                        excludes = project.koverExcludes
+                    }
+
                 }
-            }
-            if (name == "testDebugUnitTest") {
-                kover {
-                    enabled = true
-                    binaryReportFile.set(file("$buildDir/kover/debug-report.bin"))
-                    includes = [ 'fr.pitdev.dayoff.*' ]
-                    excludes = project.koverExcludes
+                if (it.name == "testReleaseUnitTest") {
+                    kover {
+                        disabled = true
+                    }
                 }
             }
         }
@@ -55,26 +58,26 @@ android {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
 
-    implementation "androidx.collection:collection-ktx:1.1.0"
+    implementation 'androidx.collection:collection-ktx:1.2.0'
 
-    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // For Robolectric tests.
-    testImplementation 'com.google.dagger:hilt-android-testing:2.40.1'
+    testImplementation 'com.google.dagger:hilt-android-testing:2.41'
     // ...with Kotlin.
-    kaptTest 'com.google.dagger:hilt-android-compiler:2.40.1'
+    kaptTest 'com.google.dagger:hilt-android-compiler:2.41'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1-native-mt'
 
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1-native-mt'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 }

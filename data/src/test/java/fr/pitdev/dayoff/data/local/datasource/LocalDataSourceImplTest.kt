@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalDate
@@ -48,7 +49,7 @@ class LocalDataSourceImplTest : HiltTest() {
 
 
     @Test
-    fun `GIVEN day off WHEN get all dayoff then return the expected dayoff`() = runBlocking {
+    fun `GIVEN day off WHEN get all dayoff then return the expected dayoff`() = runTest {
         localDataSourceImpl.saveDayOffs(listOf(dayOff11NovMet))
         val result = localDataSourceImpl.getAllDayOff().first()
         assertEquals(dayOff11NovMet, result[0])
@@ -57,7 +58,7 @@ class LocalDataSourceImplTest : HiltTest() {
 
     @Test
     fun `GIVEN day off WHEN get all dayoff by zone  then return the expected dayoff`() =
-        runBlocking {
+        runTest {
             localDataSourceImpl.saveDayOffs(dayOff)
             val result = localDataSourceImpl.getAllDayOff(zone = Zone.ALSACE_MOSELLE).first()
             assertEquals(dayOff11NovAlsMos, result[1])
@@ -66,7 +67,7 @@ class LocalDataSourceImplTest : HiltTest() {
 
     @Test
     fun `GIVEN day off WHEN get all dayoff by zone and year then return the expected dayoff`() =
-        runBlocking {
+        runTest {
             localDataSourceImpl.saveDayOffs(dayOff)
             val result =
                 localDataSourceImpl.getAllDayOff(zone = Zone.ALSACE_MOSELLE, year = 2020).first()
@@ -74,7 +75,7 @@ class LocalDataSourceImplTest : HiltTest() {
         }
 
     @Test
-    fun `GIVEN dayoff WHEN save all THEN must be saved into database`() = runBlockingTest {
+    fun `GIVEN dayoff WHEN save all THEN must be saved into database`() = runBlocking {
 
         localDataSourceImpl.saveDayOffs(dayOff)
     }
