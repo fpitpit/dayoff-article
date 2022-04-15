@@ -1,5 +1,45 @@
 workflows:
-  hello-world:
-    name: Hello world workflow
+  android:
+    max_build_duration: 60
+    triggering:
+      events:
+        - push
+        - tag
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+    #instance_type: mac_pro
+    name: build, test & publish Android version
     scripts:
-      - echo "Hello World!"
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$FCI_BUILD_DIR/local.properties"
+      - name: Set chmod +x gradlew
+        script: chmod +x gradlew
+      - name: Build bundle debug aab
+        script: |
+          ./gradlew bundleDebug
+      - name: Build Android test APK
+        script: |
+          ./gradlew testDebugUnitTest
+    artifacts:
+      - app/build/**/outputs/bundle/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - fpitoiset.pro@gmail.com
+          - fabrice.pitoiset@publicissapient.com
+        notify:
+          success: true
+          failure: false
+      slack:
+        channel: '#general'
+        notify_on_build_start: true # To receive a notification when a build starts
+        notify:
+          success: true # To not receive a notification when a build succeeds
+          failure: true # To not receive a notification when a build fails
+    cache:
+      cache_paths:
+        - ~/.gradle/caches
