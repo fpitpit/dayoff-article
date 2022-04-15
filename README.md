@@ -2,6 +2,8 @@
 
 Application android de jours fériés pour tuto de comparaison entre Hilt et Koin
 
+[![Codemagic build status](https://api.codemagic.io/apps/625719e3dfd8ad04719ba2ec/android/status_badge.svg)](https://codemagic.io/apps/625719e3dfd8ad04719ba2ec/android/latest_build)
+
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
