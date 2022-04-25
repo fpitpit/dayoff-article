@@ -21,11 +21,18 @@ workflows:
       - name: Build bundle debug aab
         script: |
           ./gradlew bundleDebug
-      - name: Build Android test APK
+      - name: Test
         script: |
           ./gradlew testDebugUnitTest
+        test_report: '**/build/test-results/**/*.xml'
+      - name: Lint
+        script: ./gradlew lintDebug
+      - name: Kover
+        script: ./gradlew koverMergedReport
     artifacts:
       - app/build/**/outputs/bundle/**/*.aab
+      - '**/build/reports/lint-results-*.html'
+      - build/reports/kover/html
     publishing:
       email:
         recipients:
