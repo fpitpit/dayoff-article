@@ -1,7 +1,6 @@
 package fr.pitdev.dayoff.data
 
 import androidx.annotation.CallSuper
-import androidx.room.RoomDatabase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -27,10 +26,6 @@ abstract class HiltTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
-
-    @ExperimentalCoroutinesApi
-    @get:Rule
-    val testCoroutineRule = TestCoroutineRule()
 
 
     @ExperimentalCoroutinesApi

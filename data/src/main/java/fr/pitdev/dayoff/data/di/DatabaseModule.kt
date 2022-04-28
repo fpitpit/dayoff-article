@@ -11,7 +11,6 @@ import fr.pitdev.dayoff.data.room.entities.DayOffDao
 import fr.pitdev.dayoff.data.room.entities.DayOffDatabase
 import fr.pitdev.dayoff.data.room.entities.DayOffDatabase.Companion.DATABASE_NAME
 import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module

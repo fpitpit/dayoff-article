@@ -1,11 +1,9 @@
 package fr.pitdev.dayoff.data.dtos
 
 import androidx.annotation.Keep
-import com.google.gson.Gson
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 enum class ZoneDto(val zoneName: String) {
@@ -33,7 +31,7 @@ fun DayOffDto.toDomain(zoneDto: ZoneDto): List<DayOff> {
     return dates.map {
         DayOff(
             zone = zoneDto.toDomain(),
-            date =  LocalDate.parse(it.key),
+            date = LocalDate.parse(it.key),
             name = it.value
         )
     }

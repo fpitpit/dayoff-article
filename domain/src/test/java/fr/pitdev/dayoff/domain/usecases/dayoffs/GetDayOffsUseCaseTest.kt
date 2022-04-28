@@ -1,7 +1,6 @@
 package fr.pitdev.dayoff.domain.usecases.dayoffs
 
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
-import fr.pitdev.dayoff.domain.BaseTest
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import fr.pitdev.dayoff.domain.repository.DayOffRepository
@@ -11,15 +10,15 @@ import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
 
 
-class GetDayOffsUseCaseTest : BaseTest() {
-    lateinit var getDayOffsUseCase: GetDayOffsUseCase
-    lateinit var dayOffRepository: DayOffRepository
+class GetDayOffsUseCaseTest {
+    private lateinit var getDayOffsUseCase: GetDayOffsUseCase
+    private lateinit var dayOffRepository: DayOffRepository
 
     @Before
     fun setUp() {
@@ -30,7 +29,7 @@ class GetDayOffsUseCaseTest : BaseTest() {
     @ExperimentalCoroutinesApi
     @Test
     fun `GIVEN dayoff data WHEN get dayoff and year for zone THEN return list of dayoff`() =
-        testRule.runBlockingTest {
+        runTest {
             val expected = listOf(
                 DayOff(
                     id = 1,

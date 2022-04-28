@@ -12,7 +12,6 @@ import fr.pitdev.dayoff.data.utils.networkBoundResource
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import fr.pitdev.dayoff.domain.repository.DayOffRepository
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
@@ -56,7 +55,7 @@ class DayOffRepositoryImpl(
         localDataSource.getAllDayOff(zone, year)
 
     companion object {
-        val TAG = DayOffRepositoryImpl::class.java.simpleName
+        val TAG: String = DayOffRepositoryImpl::class.java.simpleName
     }
 
 }

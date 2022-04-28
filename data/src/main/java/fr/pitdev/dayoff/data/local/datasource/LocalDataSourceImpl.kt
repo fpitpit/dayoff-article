@@ -7,9 +7,8 @@ import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class LocalDataSourceImpl (val dayOffDao: DayOffDao) : LocalDataSource {
+class LocalDataSourceImpl(val dayOffDao: DayOffDao) : LocalDataSource {
     override suspend fun saveDayOffs(dayOffs: List<DayOff>) =
         dayOffDao.save(dayOffs.map { it.toEntity() })
 
