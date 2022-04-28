@@ -1,9 +1,54 @@
 workflows:
+  testLab:
+    environment:
+      groups:
+        - firebase_credentials
+    max_build_duration: 60
+    name: test lab
+    scripts:
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$FCI_BUILD_DIR/local.properties"
+      - name: Set chmod +x gradlew
+        script: chmod +x gradlew
+      - name: assemble Android Test
+        script: ./gradlew app:bundleDebug app:assembleDebugAndroidTest
+      - name: Run Firebase Test Lab tests
+        script: |
+          set -ex
+          echo $GCLOUD_KEY_FILE > ./gcloud_key_file.json
+          gcloud auth activate-service-account --key-file=gcloud_key_file.json
+          gcloud --quiet config set project $FIREBASE_PROJECT
+          gcloud firebase test android run \
+            --type instrumentation \
+            --app $FCI_BUILD_DIR/app/build/outputs/bundle/debug/app-debug.aab \
+            --test $FCI_BUILD_DIR/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+            --device model=oriole,version=31  \
+            --device model=redfin,version=30 \
+            --environment-variables coverage=true,coverageFile="/sdcard/coverage.ec" \
+            --directories-to-pull /sdcard \
+            --timeout 3m \
+            --results-bucket=tests-lab
+    publishing:
+      slack:
+        channel: '#general'
+        notify_on_build_start: true # To receive a notification when a build starts
+        notify:
+          success: true # To not receive a notification when a build succeeds
+          failure: true # To not receive a notification when a build fails
+    cache:
+      cache_paths:
+        - ~/.gradle/caches
+
+
   android:
+    environment:
+      groups:
+        - emulatorwtf
     max_build_duration: 60
     triggering:
       events:
-        - push
+        #- push
         - tag
         - pull_request
       branch_patterns:
@@ -16,6 +61,7 @@ workflows:
       - name: Set Android SDK location
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$FCI_BUILD_DIR/local.properties"
+          echo $CM_BUILD_DIR
       - name: Set chmod +x gradlew
         script: chmod +x gradlew
       - name: Build bundle debug aab
@@ -32,6 +78,7 @@ workflows:
     artifacts:
       - app/build/**/outputs/bundle/**/*.aab
       - '**/build/reports/lint-results-*.html'
+      - build/**/outputs/**/mapping.txt
       - build/reports/kover/html
     publishing:
       email:

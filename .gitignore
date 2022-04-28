@@ -86,3 +86,5 @@ lint/tmp/
 # lint/reports/
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/codeStyles/Project.xml
+/.idea/sonarlint/issuestore/
+/.idea/git_toolbox_prj.xml
