@@ -76,6 +76,7 @@ android {
         checkDependencies true
     }
     dynamicFeatures = [':features:dayofffeature']
+    namespace 'fr.pitdev.dayoff'
 }
 
 dependencies {

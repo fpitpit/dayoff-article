@@ -8,6 +8,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import okhttp3.internal.EMPTY_RESPONSE
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -18,7 +19,7 @@ import java.net.ConnectException
 class DayOffRemoteDataSourceImplTest {
     @ExperimentalCoroutinesApi
     @Test
-    fun `GIVEN success with dayoff THEN call api THEN return success`() = runBlockingTest {
+    fun `GIVEN success with dayoff THEN call api THEN return success`() = runTest {
         val dayOffApiService: DayOffApiService = mockk()
 
         coEvery { dayOffApiService.getAll(any(), any()) } returns Response.success(
@@ -42,12 +43,12 @@ class DayOffRemoteDataSourceImplTest {
         val result = dayOffRemoteDataSourceImpl.getAll(ZoneDto.METROPOLE)
         assertNotNull(result as NetworkStatus.Success)
 
-        //assertEquals("fête nationale", result.data.dates["2021-07-14"])
+        assertEquals("14 juillet", result.data.dates["2021-07-14"])
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `GIVEN error 500 THEN call api THEN return network error`() = runBlockingTest {
+    fun `GIVEN error 500 THEN call api THEN return network error`() = runTest {
         val dayOffApiService: DayOffApiService = mockk()
 
         coEvery { dayOffApiService.getAll(any(), any()) } returns Response.error(
@@ -64,7 +65,7 @@ class DayOffRemoteDataSourceImplTest {
     @ExperimentalCoroutinesApi
     @Test
     fun `GIVEN exception THEN call api THEN return network error connect exception`() =
-        runBlockingTest {
+        runTest {
             val dayOffApiService: DayOffApiService = mockk()
 
             coEvery {

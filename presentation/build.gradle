@@ -78,6 +78,7 @@ android {
         // projects consisting of an app with library dependencies.
         checkDependencies true
     }
+    namespace 'fr.pitdev.dayoff.presentation'
 }
 
 dependencies {
