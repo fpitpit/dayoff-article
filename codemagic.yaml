@@ -87,7 +87,7 @@ workflows:
           - fabrice.pitoiset@publicissapient.com
         notify:
           success: true
-          failure: false
+          failure: true
       slack:
         channel: '#general'
         notify_on_build_start: true # To receive a notification when a build starts
