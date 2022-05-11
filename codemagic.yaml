@@ -49,10 +49,10 @@ workflows:
     triggering:
       events:
         - push
-        - tag
         - pull_request
+        - tag
       branch_patterns:
-        - pattern: 'develop,main'
+        - pattern: '*'
           include: true
           source: true
     #instance_type: mac_pro
