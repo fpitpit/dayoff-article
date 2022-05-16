@@ -4,7 +4,8 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
-apply from: '../kover.gradle'
+//apply from: '../kover.gradle'
+apply from: "$project.rootDir/jacoco.gradle"
 
 android {
     compileSdk 31
@@ -37,22 +38,6 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
-            all {
-                if (it.name == "testDebugUnitTest") {
-                    kover {
-                        disabled = false
-                        binaryReportFile.set(file("$buildDir/custom/debug-report.bin"))
-                        includes = ["fr.pitdev.dayoff.*"]
-                        excludes = project.koverExcludes
-                    }
-
-                }
-                if (it.name == "testReleaseUnitTest") {
-                    kover {
-                        disabled = true
-                    }
-                }
-            }
         }
     }
     lint {
@@ -93,10 +78,10 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     testImplementation 'junit:junit:4.13.2'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"

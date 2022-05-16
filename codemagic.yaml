@@ -67,19 +67,21 @@ workflows:
       - name: Build bundle debug aab
         script: |
           ./gradlew bundleDebug
-      - name: Test
+      - name: Test & coverage
         script: |
-          ./gradlew testDebugUnitTest
+          ./gradlew testDebugUnitTest testDebugUnitTestCoverage --stacktrace
         test_report: '**/build/test-results/**/*.xml'
       - name: Lint
         script: ./gradlew lintDebug
-      - name: Kover
-        script: ./gradlew koverMergedReport
+      #- name: Kover
+      #  script: ./gradlew koverMergedReport
     artifacts:
       - app/build/**/outputs/bundle/**/*.aab
       - '**/build/reports/lint-results-*.html'
       - build/**/outputs/**/mapping.txt
-      - build/reports/kover/html
+      #- build/reports/kover/html
+      - '**/build/coverage-report'
+      - build/reports/configuration-cache
     publishing:
       email:
         recipients:

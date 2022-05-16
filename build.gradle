@@ -6,11 +6,11 @@ buildscript {
         kotlin_version = "1.6.21"
         nav_version = "2.3.1"
         room_version = '2.4.2'
-        hilt_version = '2.41'
+        hilt_version = '2.42'
         kover_version = '0.5.0'
         gradle_plugin_version = '7.2.0'
         jacoco_version = '0.8.7'
-        robolectric_version = '4.7.3'
+        robolectric_version = '4.8.1'
 
     }
 
@@ -24,29 +24,35 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "org.jetbrains.kotlinx:kover:$kover_version"
+        classpath "org.jacoco:org.jacoco.core:$jacoco_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
 }
 
-
+allprojects {
+    apply plugin: 'jacoco'
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-apply plugin: 'kover'
-apply from: 'kover.gradle'
+//apply plugin: 'kover'
+//apply from: 'kover.gradle'
 
-kover {
-    disabled = false                        // true to disable instrumentation of all test tasks in all projects
-    coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) // change instrumentation agent and reporter
-    intellijEngineVersion.set('1.0.656')    // change version of IntelliJ agent and reporter
-    jacocoEngineVersion.set('0.8.7')        // change version of JaCoCo agent and reporter
-    generateReportOnCheck = true            // false to do not execute `koverMergedReport` task before `check` task
-    disabledProjects = []                   // ["project-name"] to disable coverage for project with name `project-name`
-    instrumentAndroidPackage = false        // true to instrument packages `android.*` and `com.android.*`
-    runAllTestsForProjectTask = true       // true to run all tests in all projects if `koverHtmlReport`, `koverXmlReport`, `koverReport`, `koverVerify` or `check` tasks executed on some project
-}
+
+
+//kover {
+//    disabled = false                        // true to disable instrumentation of all test tasks in all projects
+//    coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) // change instrumentation agent and reporter
+//    intellijEngineVersion.set('1.0.656')    // change version of IntelliJ agent and reporter
+//    jacocoEngineVersion.set('0.8.7')        // change version of JaCoCo agent and reporter
+//    generateReportOnCheck = true            // false to do not execute `koverMergedReport` task before `check` task
+//    disabledProjects = []                   // ["project-name"] to disable coverage for project with name `project-name`
+//    instrumentAndroidPackage = false        // true to instrument packages `android.*` and `com.android.*`
+//    runAllTestsForProjectTask = true       // true to run all tests in all projects if `koverHtmlReport`, `koverXmlReport`, `koverReport`, `koverVerify` or `check` tasks executed on some project
+//}
 
 //tasks.koverMergedHtmlReport {
 //    enabled = true                          // false to disable report generation

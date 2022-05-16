@@ -5,7 +5,8 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-apply from: '../kover.gradle'
+//apply from: '../kover.gradle'
+apply from: "$project.rootDir/jacoco.gradle"
 
 android {
     compileSdk 31
@@ -35,22 +36,6 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
-            all {
-                if (it.name == "testDebugUnitTest") {
-                    kover {
-                        disabled = false
-                        binaryReportFile.set(file("$buildDir/custom/debug-report.bin"))
-                        includes = ["fr.pitdev.dayoff.common.*"]
-                        excludes = project.koverExcludes
-                    }
-
-                }
-                if (it.name == "testReleaseUnitTest") {
-                    kover {
-                        disabled = true
-                    }
-                }
-            }
         }
     }
     lint {
@@ -80,7 +65,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
 
     implementation 'androidx.collection:collection-ktx:1.2.0'
 
@@ -90,9 +75,9 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // For Robolectric tests.
-    testImplementation 'com.google.dagger:hilt-android-testing:2.41'
+    testImplementation 'com.google.dagger:hilt-android-testing:2.42'
     // ...with Kotlin.
-    kaptTest 'com.google.dagger:hilt-android-compiler:2.41'
+    kaptTest 'com.google.dagger:hilt-android-compiler:2.42'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
