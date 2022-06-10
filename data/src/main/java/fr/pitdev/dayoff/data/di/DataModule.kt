@@ -18,6 +18,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DataModule {
+
     @Provides
     @Singleton
     fun provideDayOffRepository(
@@ -27,7 +28,6 @@ object DataModule {
     ): DayOffRepository {
         return DayOffRepositoryImpl(dispatchProvider, remoteDataSource, localDataSource)
     }
-
 
 
     @Provides

@@ -1,8 +1,7 @@
 package fr.pitdev.dayoff.presentation.viewmodels
 
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import fr.pitdev.dayoff.common.coroutines.CoroutineDispatcherProvider
+import dagger.hilt.android.testing.HiltTestApplication
 import fr.pitdev.dayoff.common.coroutines.TestCoroutineDispatcherProvider
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import fr.pitdev.dayoff.domain.models.DayOff
@@ -11,27 +10,34 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toSet
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(application = HiltTestApplication::class, sdk = [Config.OLDEST_SDK, Config.TARGET_SDK])
 class DayOffsViewModelTest {
 
+    private lateinit var coroutineDispatcherProvider: TestCoroutineDispatcherProvider
     private lateinit var dayOffsViewModel: DayOffsViewModel
 
     private val getDayOffsUseCase: GetDayOffsUseCase = mockk()
 
+    @Before
+    fun setUo() {
+        coroutineDispatcherProvider = TestCoroutineDispatcherProvider()
+    }
 
     @ExperimentalCoroutinesApi
     @Test
     fun testViewModel() = runTest {
+        val testCoroutineDispatcher = StandardTestDispatcher()
         coEvery {
             getDayOffsUseCase.invoke(
                 any(),
@@ -40,7 +46,7 @@ class DayOffsViewModelTest {
         } returns flowOf(NetworkStatus.Loading, NetworkStatus.Success(emptyList()))
         dayOffsViewModel =
             DayOffsViewModel(
-                TestCoroutineDispatcherProvider(),
+                coroutineDispatcherProvider,
                 getDayOffsUseCase,
 
                 )

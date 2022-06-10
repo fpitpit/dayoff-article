@@ -12,7 +12,6 @@ import javax.inject.Singleton
 object CoroutineDispatcherModule {
 
     @Provides
-    @Singleton
     internal fun provideDispatcherProvider(): CoroutineDispatcherProvider =
         CoroutineDispatcherProvider()
 }

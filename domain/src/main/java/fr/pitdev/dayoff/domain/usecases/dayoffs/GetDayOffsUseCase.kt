@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class GetDayOffsUseCase @Inject constructor(private val dayOffRepository: DayOffRepository) {
 
-    suspend operator fun invoke(
+    operator fun invoke(
         zone: Zone = Zone.METROPOLE,
         year: Int = LocalDate.now().year
     ): Flow<NetworkStatus<List<DayOff>>> {

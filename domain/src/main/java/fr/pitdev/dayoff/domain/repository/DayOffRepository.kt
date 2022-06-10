@@ -5,7 +5,8 @@ import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import kotlinx.coroutines.flow.Flow
 
+
 interface DayOffRepository {
 
-    suspend fun getDayOffs(zone: Zone, year: Int): Flow<NetworkStatus<List<DayOff>>>
+    fun getDayOffs(zone: Zone, year: Int): Flow<NetworkStatus<List<DayOff>>>
 }

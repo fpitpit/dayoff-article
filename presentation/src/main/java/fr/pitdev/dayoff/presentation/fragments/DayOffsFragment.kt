@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 import fr.pitdev.dayoff.common.base.BaseFragment
 import fr.pitdev.dayoff.presentation.R
 import fr.pitdev.dayoff.presentation.databinding.FragmentDayoffsBinding
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
 
     private val dayOffsViewModel: DayOffsViewModel by viewModels()
@@ -37,7 +39,7 @@ class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 dayOffsViewModel.getDayOffs().collectLatest {
-                    Log.d(TAG, "onViewCreated: it")
+                    Log.d(TAG, "onViewCreated: $it")
                 }
             }
         }
