@@ -14,13 +14,11 @@ import fr.pitdev.dayoff.common.base.BaseFragment
 import fr.pitdev.dayoff.presentation.R
 import fr.pitdev.dayoff.presentation.databinding.FragmentDayoffsBinding
 import fr.pitdev.dayoff.presentation.viewmodels.DayOffsViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
-
     private val dayOffsViewModel: DayOffsViewModel by viewModels()
     private var _binding: FragmentDayoffsBinding? = null
     private val binding get() = _binding
@@ -37,13 +35,14 @@ class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                dayOffsViewModel.getDayOffs().collectLatest {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dayOffsViewModel.uiState.collect {
                     Log.d(TAG, "onViewCreated: $it")
                 }
             }
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

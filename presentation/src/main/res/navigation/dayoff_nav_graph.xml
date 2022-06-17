@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dayoff_nav_graph"
+    app:startDestination="@id/dayOffsFragment">
+
+    <fragment
+        android:id="@+id/dayOffsFragment"
+        android:name="fr.pitdev.dayoff.presentation.fragments.DayOffsFragment"
+        android:label="DayOffsFragment">
+        <argument
+            android:name="param"
+            app:argType="fr.pitdev.dayoff.presentation.viewmodels.DayOffViewModelParam"
+            android:defaultValue="@null"
+            app:nullable="true" />
+    </fragment>
+
+</navigation>

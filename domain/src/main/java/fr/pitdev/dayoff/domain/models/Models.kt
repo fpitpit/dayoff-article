@@ -1,10 +1,12 @@
 package fr.pitdev.dayoff.domain.models
 
+import android.os.Parcelable
 import androidx.annotation.Keep
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
 @Keep
-enum class Zone(zoneName: String) {
+enum class Zone(val zoneName: String) {
     ALSACE_MOSELLE("alsace-moselle"),
     GUADELOUPE("guadelooupe"),
     GUYANE("guyane"),
@@ -20,8 +22,10 @@ enum class Zone(zoneName: String) {
     WALLIS_ET_FUTUNA("wallis-et-futuna"),
 }
 
+@Parcelize
 @Keep
-data class DayOff(val id: Int? = null, val zone: Zone, val date: LocalDate, val name: String)
+data class DayOff(val id: Int? = null, val zone: Zone, val date: LocalDate, val name: String) :
+    Parcelable
 
 
 

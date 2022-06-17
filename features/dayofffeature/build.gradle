@@ -73,7 +73,6 @@ dependencies {
     implementation project(":app")
     implementation project(":domain")
     implementation project(":common")
-    implementation project(":navigation")
     implementation project(":presentation")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
