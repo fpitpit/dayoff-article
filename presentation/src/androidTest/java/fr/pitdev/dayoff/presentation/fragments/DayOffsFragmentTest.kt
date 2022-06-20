@@ -2,6 +2,10 @@ package fr.pitdev.dayoff.presentation.fragments
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -53,9 +57,8 @@ class DayOffsFragmentTest {
 
         launchFragmentInHiltContainer<DayOffsFragment>(
             fragmentArgs = DayOffsFragmentArgs(param = DayOffViewModelParam()).toBundle()
-        ) {
-
-        }
+        ) { }
+        onView(withId(fr.pitdev.dayoff.presentation.R.id.dayoff_list)).check(matches(isDisplayed()))
 
     }
 

@@ -26,7 +26,7 @@ class DayOffsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val arg = savedStateHandle.getLiveData(PARAM, DayOffViewModelParam())
-    private val _uiState: MutableStateFlow<DayfOffsState> = MutableStateFlow(DayfOffsState.Idle)
+    private val _uiState: MutableStateFlow<DayfOffsState> = MutableStateFlow(DayfOffsState.Loading)
     val uiState: StateFlow<DayfOffsState> = _uiState
 
     init {
@@ -58,9 +58,6 @@ class DayOffsViewModel @Inject constructor(
 }
 
 sealed class DayfOffsState : Parcelable {
-    @Parcelize
-    object Idle : DayfOffsState()
-
     @Parcelize
     object Loading : DayfOffsState()
 
