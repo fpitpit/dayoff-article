@@ -42,17 +42,28 @@ class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
                 }
             }
         }
+        binding?.swiperefresh?.setOnRefreshListener {
+            dayOffsViewModel.refresh()
+            binding?.swiperefresh?.isRefreshing = false
+        }
     }
 
     private fun bindView(state: DayfOffsState) {
         when (state) {
-            is DayfOffsState.Loading -> binding?.dayoffList?.visibility = View.GONE
+            is DayfOffsState.Loading -> {
+                binding?.dayoffList?.visibility = View.GONE
+                binding?.loading?.visibility = View.VISIBLE
+            }
+
             is DayfOffsState.Loaded -> {
-                binding?.dayoffList?.visibility = View.VISIBLE
+                binding?.loading?.visibility = View.GONE
                 binding?.dayoffList?.setData(state.dayOffs)
+                binding?.dayoffList?.visibility = View.VISIBLE
 
             }
             is DayfOffsState.Error -> view?.let {
+                binding?.loading?.visibility = View.GONE
+                binding?.dayoffList?.visibility = View.GONE
                 Snackbar.make(
                     it,
                     state.message ?: state.throwable?.message ?: "",

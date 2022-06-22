@@ -20,7 +20,7 @@ class DayOffRepositoryImpl(
     private val remoteDataSource: DayOffRemoteDataSource,
     private val localDataSource: LocalDataSource
 ) : DayOffRepository {
-    override fun getDayOffs(zone: Zone, year: Int): Flow<NetworkStatus<List<DayOff>>> {
+    override fun getDayOffs(zone: Zone, year: Int, refresh: Boolean): Flow<NetworkStatus<List<DayOff>>> {
         return networkBoundResource(
             query = { fetchLocalDayOff(zone, year) },
             fetch = { fetchRemoteData(zone, year) },
@@ -29,6 +29,7 @@ class DayOffRepositoryImpl(
                 saveData(response, zone)
             },
             clearData = {},
+            shouldFetch = { result -> result.isEmpty() || refresh },
             coroutineDispatcher = dispatchProvider.io
         )
     }

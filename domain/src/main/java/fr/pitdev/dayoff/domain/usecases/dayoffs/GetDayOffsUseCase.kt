@@ -12,8 +12,9 @@ class GetDayOffsUseCase @Inject constructor(private val dayOffRepository: DayOff
 
     operator fun invoke(
         zone: Zone? = Zone.METROPOLE,
-        year: Int? = LocalDate.now().year
+        year: Int? = LocalDate.now().year,
+        refresh: Boolean = false
     ): Flow<NetworkStatus<List<DayOff>>> {
-        return dayOffRepository.getDayOffs(zone ?: Zone.METROPOLE, year ?: LocalDate.now().year)
+        return dayOffRepository.getDayOffs(zone ?: Zone.METROPOLE, year ?: LocalDate.now().year, refresh = refresh)
     }
 }

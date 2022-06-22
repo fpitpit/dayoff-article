@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DayOffRepository {
 
-    fun getDayOffs(zone: Zone, year: Int): Flow<NetworkStatus<List<DayOff>>>
+    fun getDayOffs(zone: Zone, year: Int, refresh: Boolean = false): Flow<NetworkStatus<List<DayOff>>>
 }

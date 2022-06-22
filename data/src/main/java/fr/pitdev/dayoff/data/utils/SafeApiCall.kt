@@ -1,8 +1,7 @@
 package fr.pitdev.dayoff.data.utils
 
 import com.squareup.moshi.JsonDataException
-import fr.pitdev.dayoff.common.base.utils.CONNECT_EXCEPTION
-import fr.pitdev.dayoff.common.base.utils.UNKNOWN_HOST_EXCEPTION
+import fr.pitdev.dayoff.common.base.DayOffException
 import fr.pitdev.dayoff.common.base.utils.UNKNOWN_NETWORK_EXCEPTION
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import retrofit2.HttpException
@@ -22,11 +21,22 @@ suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): NetworkStatu
 
     }.onFailure {
         return when (it) {
-            is ConnectException -> NetworkStatus.Error(CONNECT_EXCEPTION, it)
-            is JsonDataException -> NetworkStatus.Error(it.message, it)
-            is UnknownHostException -> NetworkStatus.Error(UNKNOWN_HOST_EXCEPTION, it)
-            is HttpException -> NetworkStatus.Error(UNKNOWN_NETWORK_EXCEPTION, it)
-            else -> NetworkStatus.Error(UNKNOWN_NETWORK_EXCEPTION)
+            is ConnectException ->
+                NetworkStatus.Exception(DayOffException.ConnectException(it))
+
+            is DayOffException.SocketTimeOutException -> NetworkStatus.Exception(
+                DayOffException.SocketTimeOutException(
+                    it
+                )
+            )
+            is JsonDataException -> NetworkStatus.Exception(DayOffException.JsonDataException(it))
+            is UnknownHostException -> NetworkStatus.Exception(
+                DayOffException.UnknownHostException(
+                    it
+                )
+            )
+            is HttpException -> NetworkStatus.Exception(DayOffException.HttpException(it))
+            else -> NetworkStatus.Exception(DayOffException.UnknownNetworkException(it))
         }
     }.getOrElse { return NetworkStatus.Error(UNKNOWN_NETWORK_EXCEPTION) }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import fr.pitdev.dayoff.common.base.DayOffException
 import fr.pitdev.dayoff.common.coroutines.CoroutineDispatcherProvider
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import fr.pitdev.dayoff.domain.models.DayOff
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.lang.IllegalStateException
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -33,10 +35,19 @@ class DayOffsViewModel @Inject constructor(
         getDayOffs(arg.value)
     }
 
-    private fun getDayOffs(param: DayOffViewModelParam? = DayOffViewModelParam()) {
+    fun refresh() {
+        viewModelScope.launch(coroutineDispatcherProvider.default) {
+            getDayOffs(arg.value, refresh = true)
+        }
+    }
+
+    private fun getDayOffs(
+        param: DayOffViewModelParam? = DayOffViewModelParam(),
+        refresh: Boolean = false
+    ) {
 
         viewModelScope.launch(coroutineDispatcherProvider.default) {
-            getDayOffsUseCase(param?.zone, param?.year).collect { result ->
+            getDayOffsUseCase(param?.zone, param?.year, refresh = refresh).collect { result ->
                 when (result) {
                     is NetworkStatus.Loading -> _uiState.tryEmit(DayfOffsState.Loading)
                     is NetworkStatus.Success -> _uiState.tryEmit(DayfOffsState.Loaded(dayOffs = result.data))
@@ -44,6 +55,12 @@ class DayOffsViewModel @Inject constructor(
                         DayfOffsState.Error(
                             throwable = result.throwable,
                             message = result.errorMessage
+                        )
+                    )
+                    is NetworkStatus.Exception -> _uiState.tryEmit(
+                        DayfOffsState.Error(
+                            throwable = result.dayOffException.cause,
+                            message = result.dayOffException.message
                         )
                     )
 

@@ -77,7 +77,7 @@ class DayOffRemoteDataSourceImplTest {
             val dayOffRemoteDataSourceImpl =
                 DayOffRemoteDataSourceImpl(dayOffApiService = dayOffApiService)
             val result = dayOffRemoteDataSourceImpl.getAll(ZoneDto.METROPOLE)
-            assertNotNull(result as NetworkStatus.Error)
-            assertEquals(CONNECT_EXCEPTION, result.errorMessage)
+            assertNotNull(result as NetworkStatus.Exception)
+            assertEquals(CONNECT_EXCEPTION, result.dayOffException.message)
         }
 }
