@@ -7,7 +7,6 @@ import fr.pitdev.dayoff.data.remote.api.DayOffApiService
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import okhttp3.internal.EMPTY_RESPONSE
 import org.junit.Assert.assertEquals
@@ -77,7 +76,7 @@ class DayOffRemoteDataSourceImplTest {
             val dayOffRemoteDataSourceImpl =
                 DayOffRemoteDataSourceImpl(dayOffApiService = dayOffApiService)
             val result = dayOffRemoteDataSourceImpl.getAll(ZoneDto.METROPOLE)
-            assertNotNull(result as NetworkStatus.Exception)
-            assertEquals(CONNECT_EXCEPTION, result.dayOffException.message)
+            assertNotNull(result as NetworkStatus.Error)
+            assertEquals(CONNECT_EXCEPTION, result.errorMessage)
         }
 }

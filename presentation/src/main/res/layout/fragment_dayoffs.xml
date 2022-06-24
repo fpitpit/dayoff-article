@@ -4,23 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-    <fr.pitdev.dayoff.presentation.fragments.DayOffRecyclerView
-        android:id="@+id/dayoff_list"
-        tools:listitem="@layout/item_dayoff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <fr.pitdev.dayoff.presentation.fragments.DayOffRecyclerView
+            android:id="@+id/dayoff_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_dayoff" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loading"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

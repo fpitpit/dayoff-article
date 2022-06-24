@@ -1,12 +1,13 @@
 package fr.pitdev.dayoff.data.utils
 
 import com.squareup.moshi.JsonDataException
-import fr.pitdev.dayoff.common.base.DayOffException
-import fr.pitdev.dayoff.common.base.utils.UNKNOWN_NETWORK_EXCEPTION
+import fr.pitdev.dayoff.common.base.utils.*
+//import fr.pitdev.dayoff.common.base.DayOffException
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import retrofit2.HttpException
 import retrofit2.Response
 import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): NetworkStatus<T> {
@@ -22,21 +23,12 @@ suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): NetworkStatu
     }.onFailure {
         return when (it) {
             is ConnectException ->
-                NetworkStatus.Exception(DayOffException.ConnectException(it))
-
-            is DayOffException.SocketTimeOutException -> NetworkStatus.Exception(
-                DayOffException.SocketTimeOutException(
-                    it
-                )
-            )
-            is JsonDataException -> NetworkStatus.Exception(DayOffException.JsonDataException(it))
-            is UnknownHostException -> NetworkStatus.Exception(
-                DayOffException.UnknownHostException(
-                    it
-                )
-            )
-            is HttpException -> NetworkStatus.Exception(DayOffException.HttpException(it))
-            else -> NetworkStatus.Exception(DayOffException.UnknownNetworkException(it))
+                NetworkStatus.Error(CONNECT_EXCEPTION, it)
+            is SocketTimeoutException -> NetworkStatus.Error(SOCKET_TIME_OUT_EXCEPTION, it)
+            is JsonDataException -> NetworkStatus.Error(JSON_EXCEPTION, it)
+            is UnknownHostException -> NetworkStatus.Error(UNKNOWN_HOST_EXCEPTION, it)
+            is HttpException -> NetworkStatus.Error(HTTP_EXCEPTION, it)
+            else -> NetworkStatus.Error(UNKNOWN_NETWORK_EXCEPTION, it)
         }
     }.getOrElse { return NetworkStatus.Error(UNKNOWN_NETWORK_EXCEPTION) }
 }

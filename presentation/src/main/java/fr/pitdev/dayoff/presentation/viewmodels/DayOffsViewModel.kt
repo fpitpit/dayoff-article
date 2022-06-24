@@ -56,12 +56,6 @@ class DayOffsViewModel @Inject constructor(
                             message = result.errorMessage
                         )
                     )
-                    is NetworkStatus.Exception -> _uiState.tryEmit(
-                        DayfOffsState.Error(
-                            throwable = result.dayOffException.cause,
-                            message = result.dayOffException.message
-                        )
-                    )
 
                 }
             }
