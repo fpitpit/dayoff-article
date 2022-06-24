@@ -62,7 +62,5 @@ class DayOffsFragmentTest {
 
     }
 
-    private fun launchActivity(): ActivityScenario<HiltTestActivity>? {
-        return launch(HiltTestActivity::class.java)
-    }
+
 }
