@@ -58,6 +58,4 @@ class DayOffsFragmentTest {
         onView(withId(fr.pitdev.dayoff.presentation.R.id.dayoff_list)).check(matches(isDisplayed()))
 
     }
-
-
 }
