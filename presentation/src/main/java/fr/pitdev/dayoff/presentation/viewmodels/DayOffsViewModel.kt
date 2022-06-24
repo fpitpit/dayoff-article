@@ -6,17 +6,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import fr.pitdev.dayoff.common.base.DayOffException
 import fr.pitdev.dayoff.common.coroutines.CoroutineDispatcherProvider
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import fr.pitdev.dayoff.domain.usecases.dayoffs.GetDayOffsUseCase
+import fr.pitdev.dayoff.presentation.fragments.DayOffsFragmentArgs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.lang.IllegalStateException
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -27,17 +26,17 @@ class DayOffsViewModel @Inject constructor(
     private val getDayOffsUseCase: GetDayOffsUseCase
 ) : ViewModel() {
 
-    private val arg = savedStateHandle.getLiveData(PARAM, DayOffViewModelParam())
+    private val arg = DayOffsFragmentArgs.fromSavedStateHandle(savedStateHandle)
     private val _uiState: MutableStateFlow<DayfOffsState> = MutableStateFlow(DayfOffsState.Loading)
     val uiState: StateFlow<DayfOffsState> = _uiState
 
     init {
-        getDayOffs(arg.value)
+        getDayOffs(arg.param)
     }
 
     fun refresh() {
         viewModelScope.launch(coroutineDispatcherProvider.default) {
-            getDayOffs(arg.value, refresh = true)
+            getDayOffs(arg.param, refresh = true)
         }
     }
 
@@ -67,10 +66,6 @@ class DayOffsViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    companion object {
-        const val PARAM: String = "param"
     }
 }
 

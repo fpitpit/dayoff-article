@@ -1,12 +1,12 @@
 package fr.pitdev.dayoff.presentation.viewmodels
 
 
-import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.testing.HiltTestApplication
 import fr.pitdev.dayoff.common.coroutines.TestCoroutineDispatcherProvider
 import fr.pitdev.dayoff.common.utils.network.NetworkStatus
 import fr.pitdev.dayoff.domain.models.Zone
 import fr.pitdev.dayoff.domain.usecases.dayoffs.GetDayOffsUseCase
+import fr.pitdev.dayoff.presentation.fragments.DayOffsFragmentArgs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -52,9 +52,8 @@ class DayOffsViewModelTest {
 
         dayOffsViewModel =
             DayOffsViewModel(
-                savedStateHandle = SavedStateHandle().apply {
-                    set(DayOffsViewModel.PARAM, DayOffViewModelParam(Zone.GUYANE))
-                },
+                savedStateHandle = DayOffsFragmentArgs(param = DayOffViewModelParam(zone = Zone.GUYANE))
+                    .toSavedStateHandle(),
                 coroutineDispatcherProvider,
                 getDayOffsUseCase
             )
@@ -86,9 +85,8 @@ class DayOffsViewModelTest {
 
         dayOffsViewModel =
             DayOffsViewModel(
-                savedStateHandle = SavedStateHandle().apply {
-                    set(DayOffsViewModel.PARAM, DayOffViewModelParam(Zone.GUYANE))
-                },
+                savedStateHandle = DayOffsFragmentArgs(param = DayOffViewModelParam(zone = Zone.GUYANE))
+                    .toSavedStateHandle(),
                 coroutineDispatcherProvider,
                 getDayOffsUseCase
             )
