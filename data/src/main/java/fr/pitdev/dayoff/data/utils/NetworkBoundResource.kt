@@ -16,22 +16,23 @@ inline fun <ResultType, RequestType> networkBoundResource(
 ) = flow<NetworkStatus<ResultType>> {
     val dbData = query().first()
     if (shouldFetch(dbData)) {
+        emit(NetworkStatus.Loading)
         val fetchData = fetch()
         if (shouldClear(fetchData, dbData)) {
             clearData()
         }
-        if (fetchData is NetworkStatus.Error) {
-            fetchData.throwable?.let { throw it }
-        } else {
-            saveFetchResult(fetchData)
+        when (fetchData) {
+            is NetworkStatus.Success<*> -> saveFetchResult(fetchData)
+            is NetworkStatus.Error -> {
+                fetchData.throwable?.let(onFetchFailed)
+                emit(fetchData)
+            }
         }
         val updatedData = query().first()
         emit(NetworkStatus.Success(updatedData))
     } else {
         emit(NetworkStatus.Success(dbData))
     }
-}.onStart {
-    emit(NetworkStatus.Loading)
 }.catch {
     onFetchFailed(it)
     emit(NetworkStatus.Error(throwable = it, errorMessage = it.message))
