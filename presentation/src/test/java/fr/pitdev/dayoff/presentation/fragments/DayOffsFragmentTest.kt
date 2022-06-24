@@ -1,15 +1,13 @@
 package fr.pitdev.dayoff.presentation.fragments
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.Truth
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.domain.models.Zone
 import fr.pitdev.dayoff.presentation.launchFragmentInHiltContainer
@@ -24,20 +22,31 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.time.LocalDate
 
-
 @HiltAndroidTest
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(
+    instrumentedPackages = [
+        // required to access final members on androidx.loader.content.ModernAsyncTask
+        "androidx.loader.content"
+    ],
+    manifest = Config.NONE,
+    application = HiltTestApplication::class,
+    sdk = [Config.OLDEST_SDK, Config.TARGET_SDK]
+)
 class DayOffsFragmentTest {
 
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
 
     @BindValue
     @JvmField
     var dayOffsViewModel: DayOffsViewModel = mockk(relaxed = true)
 
-    @get:Rule(order = 0)
-    var hiltRule = HiltAndroidRule(this)
+
 
     @Before
     fun init() {
@@ -52,10 +61,10 @@ class DayOffsFragmentTest {
 
     @Test
     fun testData() {
+
         launchFragmentInHiltContainer<DayOffsFragment>(
             fragmentArgs = DayOffsFragmentArgs(param = DayOffViewModelParam()).toBundle()
         ) { }
         onView(withId(fr.pitdev.dayoff.presentation.R.id.dayoff_list)).check(matches(isDisplayed()))
-
     }
 }
