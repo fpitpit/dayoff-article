@@ -3,6 +3,7 @@ package fr.pitdev.dayoff.data.room.entities
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import fr.pitdev.dayoff.domain.models.Zone
@@ -19,7 +20,7 @@ interface DayOffDao {
     @Query("SELECT * FROM day_off WHERE day_off_zone = :zone AND day_off_year = :year ORDER BY day_off_date")
     fun getAllByZoneAndYear(zone: Zone, year: Int): Flow<List<DayOffEntity>>
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = IGNORE)
     fun save(data: List<DayOffEntity>)
 
     @Delete

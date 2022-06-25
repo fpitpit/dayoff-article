@@ -19,8 +19,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "fr.pitdev.dayoff.HiltCustomTestRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -107,6 +107,7 @@ dependencies {
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.42'
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    androidTestUtil 'androidx.test:orchestrator:1.1.0'
 
 }
 

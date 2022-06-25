@@ -13,7 +13,9 @@ import dagger.hilt.components.SingletonComponent
 import fr.pitdev.dayoff.common.base.utils.BASE_URL
 import fr.pitdev.dayoff.data.BuildConfig
 import fr.pitdev.dayoff.data.remote.api.DayOffApiService
+import fr.pitdev.dayoff.data.remote.interceptors.CacheInterceptor
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -39,9 +41,11 @@ object NetworkModule {
     @Provides
     fun providesOkHttpClient(
         @ApplicationContext context: Context,
-        loggingInterceptor: HttpLoggingInterceptorLevel
+        loggingInterceptor: HttpLoggingInterceptorLevel,
+        @InterceptorCache cacheInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder().run {
+            addInterceptor(cacheInterceptor)
             when {
                 BuildConfig.DEBUG -> {
                     addInterceptor(loggingInterceptor.body())
@@ -53,6 +57,7 @@ object NetworkModule {
             }
             connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS) // Way too much?
             readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+
             // enable OkHttp cache for now
             cache(
                 Cache(
@@ -90,6 +95,10 @@ object NetworkModule {
             .build()
     }
 
+    @InterceptorCache
+    @Provides
+    fun provideInterceptor(): Interceptor = CacheInterceptor()
+
     @Provides
     @Singleton
     fun providesDayOffApiService(retrofit: Retrofit): DayOffApiService =
@@ -122,3 +131,7 @@ annotation class ConverterFactoryMoshi
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class ConverterFactoryGson
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class InterceptorCache
