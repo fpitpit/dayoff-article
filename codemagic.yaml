@@ -55,6 +55,7 @@ workflows:
         - pattern: '*'
           include: true
           source: true
+      cancel_previous_builds: true
     #instance_type: mac_pro
     name: build, test & publish Android version
     scripts:

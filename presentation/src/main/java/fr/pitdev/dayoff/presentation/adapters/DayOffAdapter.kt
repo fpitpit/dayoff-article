@@ -1,13 +1,14 @@
 package fr.pitdev.dayoff.presentation.adapters
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import extensions.isToday
 import fr.pitdev.dayoff.domain.models.DayOff
 import fr.pitdev.dayoff.presentation.databinding.ItemDayoffBinding
-import java.text.DateFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
@@ -30,9 +31,19 @@ class DayOffAdapter : ListAdapter<DayOff, DayOffAdapter.DayOffViewHolder>(DiffCa
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(dayOff: DayOff) {
-            binding.dayoffDate.text = dayOff.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(
-                Locale.getDefault()))
+            val dayOffNotToday = !dayOff.date.isToday()
+
+            binding.dayoffDate.text = dayOff.date.format(
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(
+                    Locale.getDefault()
+                )
+            )
             binding.dayoffName.text = dayOff.name
+            if (dayOffNotToday) {
+                binding.dayoffName.typeface = Typeface.DEFAULT
+            } else {
+                binding.dayoffName.typeface = Typeface.DEFAULT_BOLD
+            }
         }
 
         companion object {

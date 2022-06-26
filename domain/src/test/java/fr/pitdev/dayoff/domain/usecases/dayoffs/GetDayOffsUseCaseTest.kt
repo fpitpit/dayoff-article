@@ -6,11 +6,11 @@ import fr.pitdev.dayoff.domain.models.Zone
 import fr.pitdev.dayoff.domain.repository.DayOffRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
