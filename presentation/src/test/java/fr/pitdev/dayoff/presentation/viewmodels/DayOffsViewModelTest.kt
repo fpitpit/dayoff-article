@@ -60,7 +60,7 @@ class DayOffsViewModelTest {
 
         val sequence = mutableSetOf<DayfOffsState>()
         val job = launch {
-            dayOffsViewModel.uiState.toSet(sequence)
+            dayOffsViewModel.uiStateAsFlow.toSet(sequence)
         }
         val expected: List<DayfOffsState> =
             listOf(DayfOffsState.Loaded(emptyList()))
@@ -93,7 +93,7 @@ class DayOffsViewModelTest {
 
         val sequence = mutableSetOf<DayfOffsState>()
         val job = launch {
-            dayOffsViewModel.uiState.toSet(sequence)
+            dayOffsViewModel.uiStateAsFlow.toSet(sequence)
         }
         val expected: List<DayfOffsState> =
             listOf(DayfOffsState.Error(error))

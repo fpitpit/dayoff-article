@@ -1,9 +1,105 @@
 workflows:
+  appTester:
+    environment:
+      groups:
+        - firebase_credentials
+        - signing
+    max_build_duration: 60
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'develop'
+          include: true
+          source: true
+      cancel_previous_builds: true
+    name: App Distribution
+    scripts:
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$FCI_BUILD_DIR/local.properties"
+      - name: Set chmod +x gradlew
+        script: chmod +x gradlew
+      - name: Pre-build
+        script: |
+          #!/bin/sh
+          set -ex
+          echo $CM_KEYSTORE_FILE | base64 --decode > $CM_BUILD_DIR/dayoff.keystore
+          echo $ANDROID_FIREBASE_JSON | base64 --decode > $CM_BUILD_DIR/app/google-services.json
+      - name: bundle Release
+        script: ./gradlew app:bundleRelease
+      - name: Build universal apk
+        script: |
+          #!/bin/sh
+          set -ex
+
+          android-app-bundle build-universal-apk \
+              --bundle $FCI_BUILD_DIR/app/build/outputs/bundle/release/app-release.aab \
+              --ks $FCI_BUILD_DIR/dayoff.keystore \
+              --ks-pass $CM_KEYSTORE_PASSWORD \
+              --ks-key-alias $CM_KEY_ALIAS \
+              --key-pass $CM_KEY_PASSWORD
+      #- name: Create release notes
+      #  script: |
+      #    git log --format=%B -n 1 $(git describe --tags --abbrev=0) | tail -n +3 > release-notes.txt
+
+      #- name: upload to App Distribution
+      #  script: |
+      #    # Android Firebase App Distribution CLI
+      #    firebase appdistribution:distribute $FCI_BUILD_DIR/app/build/outputs/bundle/release/app-release-universal.apk --app 1:296353761044:android:5eda7133ce84672894a401 --groups "testeurs-release" --token "$FIREBASE_TOKEN" \
+      #    --release-notes-file "$CM_BUILD_DIR/release-notes.txt"
+      - name: Write release notes
+        script: |
+          #!/bin/sh
+          set -ex
+          echo "[$CM_BRANCH]($BUILD_NUMBER)" >> release_notes.txt
+          git shortlog >> release_notes.txt
+          echo $CM_ARTIFACT_LINKS >> release_notes.txt
+          cat release_notes.txt
+
+    artifacts:
+      - app/build/**/outputs/bundle/**/app-release-universal.apk
+      - app/build/**/outputs/bundle/**/*.aab
+      - app/build/**/outputs/apk/**/*.apk
+      - build/**/outputs/**/mapping.txt
+    publishing:
+      firebase:
+        firebase_token: $FIREBASE_TOKEN
+        android:
+          app_id: $FIREBASE_APP_ID
+          groups:
+            - testeurs-release
+          artifact_type: apk
+      email:
+        recipients:
+          - fpitoiset.pro@gmail.com
+          - fabrice.pitoiset@publicissapient.com
+        notify:
+          success: true
+          failure: true
+      slack:
+        channel: '#general'
+        notify_on_build_start: true # To receive a notification when a build starts
+        notify:
+          success: true # To not receive a notification when a build succeeds
+          failure: true # To not receive a notification when a build fails
+    cache:
+      cache_paths:
+        - ~/.gradle/caches
   testLab:
     environment:
       groups:
         - firebase_credentials
+        - signing
     max_build_duration: 60
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'release'
+          include: true
+          source: true
+      cancel_previous_builds: true
     name: test lab
     scripts:
       - name: Set Android SDK location
@@ -11,10 +107,17 @@ workflows:
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$FCI_BUILD_DIR/local.properties"
       - name: Set chmod +x gradlew
         script: chmod +x gradlew
+      - name: Pre-build
+        script: |
+          #!/bin/sh
+          set -ex
+          echo $CM_KEYSTORE_FILE | base64 --decode > $CM_BUILD_DIR/dayoff.keystore
+          echo $ANDROID_FIREBASE_JSON | base64 --decode > $CM_BUILD_DIR/app/google-services.json
       - name: assemble Android Test
         script: ./gradlew app:bundleDebug app:assembleDebugAndroidTest
       - name: Run Firebase Test Lab tests
         script: |
+          #!/bin/sh
           set -ex
           echo $GCLOUD_KEY_FILE > ./gcloud_key_file.json
           gcloud auth activate-service-account --key-file=gcloud_key_file.json
@@ -44,13 +147,12 @@ workflows:
   android:
     environment:
       groups:
-        - emulatorwtf
+        - firebase_credentials
+        - signing
     max_build_duration: 60
     triggering:
       events:
-        - push
         - pull_request
-        - tag
       branch_patterns:
         - pattern: '*'
           include: true
@@ -65,6 +167,10 @@ workflows:
           echo $CM_BUILD_DIR
       - name: Set chmod +x gradlew
         script: chmod +x gradlew
+      - name: Pre-build
+        script: |
+          echo $CM_KEYSTORE_FILE | base64 --decode > $CM_BUILD_DIR/dayoff.keystore
+          echo $ANDROID_FIREBASE_JSON | base64 --decode > $CM_BUILD_DIR/app/google-services.json
       - name: Build bundle debug aab
         script: |
           ./gradlew bundleDebug

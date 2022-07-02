@@ -54,7 +54,7 @@ class DayOffsFragmentTest {
             listOf(DayOff(zone = Zone.METROPOLE, id = 1, date = LocalDate.now(), name = "TEST"))
         val mutableStateFlow: MutableStateFlow<DayfOffsState> =
             MutableStateFlow(DayfOffsState.Loaded(list))
-        every { dayOffsViewModel.uiState } returns mutableStateFlow.asStateFlow()
+        every { dayOffsViewModel.uiStateAsFlow } returns mutableStateFlow.asStateFlow()
         hiltRule.inject()
     }
 

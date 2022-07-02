@@ -88,3 +88,4 @@ lint/tmp/
 /.idea/codeStyles/Project.xml
 /.idea/sonarlint/issuestore/
 /.idea/git_toolbox_prj.xml
+/app/google-services.json

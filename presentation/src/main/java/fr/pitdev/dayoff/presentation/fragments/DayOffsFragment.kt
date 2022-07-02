@@ -37,7 +37,7 @@ class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dayOffsViewModel.uiState.collect {
+                dayOffsViewModel.uiStateAsFlow.collect {
                     bindView(it)
                 }
             }

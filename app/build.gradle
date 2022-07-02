@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 //apply from: '../kover.gradle'
 apply from: "$project.rootDir/jacoco.gradle"
@@ -16,15 +18,44 @@ android {
         minSdk 21
         targetSdk 31
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "fr.pitdev.dayoff.HiltCustomTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
-    buildTypes {
+
+    signingConfigs {
         release {
-            minifyEnabled false
+            if (System.getenv("CI")) { // CI=true is exported by Codemagic
+                storePassword System.getenv("CM_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("CM_KEY_ALIAS")
+                keyPassword System.getenv("CM_KEY_PASSWORD")
+                storeFile file(rootProject.projectDir.absolutePath + "/dayoff.keystore")
+            } else {
+                if (rootProject.hasProperty("storeFile")) {
+                    def keyStoreFile = file(System.getProperty('user.home') + rootProject.property("storeFile"))
+                    keyAlias rootProject.property("keyAlias")
+                    keyPassword rootProject.property("keyPassword")
+                    storeFile keyStoreFile.exists() ? keyStoreFile : null
+                    storePassword rootProject.property("storePassword")
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+        }
+        release {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
         }
     }
     compileOptions {
@@ -72,18 +103,23 @@ android {
 }
 
 dependencies {
-    implementation project (":core")
+    implementation project(":core")
 
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
 
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+
     // Kotlin
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
     // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.2")
 
 
     implementation 'androidx.core:core-ktx:1.8.0'
@@ -102,14 +138,12 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation  'com.google.dagger:hilt-android-testing:2.42'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.42'
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.42'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.42'
     // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
-    androidTestUtil 'androidx.test:orchestrator:1.1.0'
+    androidTestImplementation("androidx.navigation:navigation-testing:2.4.2")
 
 }
-
 
 

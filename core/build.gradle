@@ -75,7 +75,7 @@ dependencies {
     implementation project (":domain")
     implementation project (":presentation")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring('com.android.tools:desugar_jdk_libs:1.1.6')
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

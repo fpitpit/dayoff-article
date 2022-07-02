@@ -27,8 +27,9 @@ class DayOffsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val arg = DayOffsFragmentArgs.fromSavedStateHandle(savedStateHandle)
-    private val _uiState: MutableStateFlow<DayfOffsState> = MutableStateFlow(DayfOffsState.Loading)
-    val uiState: StateFlow<DayfOffsState> = _uiState
+
+    private val uiState: MutableStateFlow<DayfOffsState> = MutableStateFlow(DayfOffsState.Loading)
+    val uiStateAsFlow: StateFlow<DayfOffsState> = uiState
 
     init {
         getDayOffs(arg.param)
@@ -48,9 +49,9 @@ class DayOffsViewModel @Inject constructor(
         viewModelScope.launch(coroutineDispatcherProvider.default) {
             getDayOffsUseCase(param?.zone, param?.year, refresh = refresh).collect { result ->
                 when (result) {
-                    is NetworkStatus.Loading -> _uiState.tryEmit(DayfOffsState.Loading)
-                    is NetworkStatus.Success -> _uiState.tryEmit(DayfOffsState.Loaded(dayOffs = result.data))
-                    is NetworkStatus.Error -> _uiState.tryEmit(
+                    is NetworkStatus.Loading -> uiState.tryEmit(DayfOffsState.Loading)
+                    is NetworkStatus.Success -> uiState.tryEmit(DayfOffsState.Loaded(dayOffs = result.data))
+                    is NetworkStatus.Error -> uiState.tryEmit(
                         DayfOffsState.Error(
                             throwable = result.throwable,
                             message = result.errorMessage
