@@ -29,11 +29,6 @@ def setupAndroidReporting() {
             }
             def testTaskName = "test${sourceName.capitalize()}UnitTest"
             def dirCoverage = "${sourceName}UnitTest"
-            System.out.println("Task -> $testTaskName")
-            System.out.println("flavor name -> $productFlavorName")
-            System.out.println("build type  name -> $buildTypeName")
-            System.out.println("sub dir coverage -> $dirCoverage")
-
 
             // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
             task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: "$testTaskName") {

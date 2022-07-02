@@ -25,7 +25,7 @@ import org.robolectric.annotation.Config
 import java.time.LocalDate
 
 @RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class, sdk = [Config.OLDEST_SDK, Config.TARGET_SDK])
+@Config(application = HiltTestApplication::class, sdk = [Config.OLDEST_SDK, 30, Config.TARGET_SDK])
 class DayOffsViewModelTest {
 
     private lateinit var coroutineDispatcherProvider: TestCoroutineDispatcherProvider

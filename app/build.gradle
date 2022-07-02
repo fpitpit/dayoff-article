@@ -11,14 +11,16 @@ plugins {
 apply from: "$project.rootDir/jacoco.gradle"
 
 android {
+    def latestBuildNumber = Integer.valueOf(System.env.BUILD_NUMBER ?: VERSION_CODE)
+
     compileSdk 31
 
     defaultConfig {
         applicationId "fr.pitdev.dayoff"
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0.0"
+        versionCode latestBuildNumber
+        versionName VERSION_NAME
 
         testInstrumentationRunner "fr.pitdev.dayoff.HiltCustomTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -61,6 +63,8 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+        coreLibraryDesugaringEnabled = true
+
     }
     kotlinOptions {
         jvmTarget = '11'
@@ -105,10 +109,12 @@ android {
 dependencies {
     implementation project(":core")
 
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
+
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
 
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
@@ -116,10 +122,10 @@ dependencies {
 
 
     // Kotlin
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
+    implementation('androidx.navigation:navigation-fragment-ktx:2.5.0')
+    implementation('androidx.navigation:navigation-ui-ktx:2.5.0')
     // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.2")
+    implementation('androidx.navigation:navigation-dynamic-features-fragment:2.5.0')
 
 
     implementation 'androidx.core:core-ktx:1.8.0'
@@ -142,7 +148,7 @@ dependencies {
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.42'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.42'
     // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:2.4.2")
+    androidTestImplementation('androidx.navigation:navigation-testing:2.5.0')
 
 }
 

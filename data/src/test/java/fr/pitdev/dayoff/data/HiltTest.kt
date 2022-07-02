@@ -16,7 +16,7 @@ import org.robolectric.annotation.LooperMode
 import javax.inject.Inject
 
 @HiltAndroidTest
-@Config(application = HiltTestApplication::class, sdk = [31], manifest = Config.NONE)
+@Config(application = HiltTestApplication::class, sdk = [Config.OLDEST_SDK, 30, Config.TARGET_SDK], manifest = Config.NONE)
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 abstract class HiltTest {

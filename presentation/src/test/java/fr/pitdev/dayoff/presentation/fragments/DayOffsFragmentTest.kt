@@ -35,7 +35,7 @@ import java.time.LocalDate
     ],
     manifest = Config.NONE,
     application = HiltTestApplication::class,
-    sdk = [Config.OLDEST_SDK, Config.TARGET_SDK]
+    sdk = [Config.OLDEST_SDK, 30, Config.TARGET_SDK]
 )
 class DayOffsFragmentTest {
 

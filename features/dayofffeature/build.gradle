@@ -74,14 +74,14 @@ dependencies {
     implementation project(":common")
     implementation project(":presentation")
 
-    coreLibraryDesugaring('com.android.tools:desugar_jdk_libs:1.1.6')
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     kapt 'com.google.dagger:hilt-compiler:2.42'
 
     implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation 'androidx.fragment:fragment-ktx:1.5.0'
 
 
 
@@ -109,7 +109,7 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation 'androidx.fragment:fragment-testing:1.4.1'
+    androidTestImplementation 'androidx.fragment:fragment-testing:1.5.0'
 
     androidTestImplementation  'com.google.dagger:hilt-android-testing:2.42'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.42'
