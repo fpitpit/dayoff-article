@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <application android:theme="@style/Theme.Dayoff">
+    <application
+        android:allowBackup="false"
+        android:theme="@style/Theme.Dayoff"
+        android:usesCleartextTraffic="false"
+        tools:targetApi="m">
         <activity
             android:name=".HiltTestActivity"
             android:exported="false" />

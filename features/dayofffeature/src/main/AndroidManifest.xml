@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution">
-    <application android:hasCode="false"/>
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:hasCode="false"
+        android:usesCleartextTraffic="false"
+        tools:targetApi="m" />
     <dist:module
         dist:instant="false"
         dist:title="@string/title_dayofffeature">

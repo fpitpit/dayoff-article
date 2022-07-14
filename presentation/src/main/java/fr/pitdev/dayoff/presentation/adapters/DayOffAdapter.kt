@@ -1,17 +1,19 @@
 package fr.pitdev.dayoff.presentation.adapters
 
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import extensions.getThemeColor
 import extensions.isToday
 import fr.pitdev.dayoff.domain.models.DayOff
+import fr.pitdev.dayoff.presentation.R
 import fr.pitdev.dayoff.presentation.databinding.ItemDayoffBinding
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
+
 
 class DayOffAdapter : ListAdapter<DayOff, DayOffAdapter.DayOffViewHolder>(DiffCallback) {
 
@@ -40,9 +42,13 @@ class DayOffAdapter : ListAdapter<DayOff, DayOffAdapter.DayOffViewHolder>(DiffCa
             )
             binding.dayoffName.text = dayOff.name
             if (dayOffNotToday) {
-                binding.dayoffName.typeface = Typeface.DEFAULT
+                binding.root.setCardBackgroundColor(null)
             } else {
-                binding.dayoffName.typeface = Typeface.DEFAULT_BOLD
+                val color = binding.root.context.getThemeColor(R.attr.colorSecondary)
+                val textColor = binding.root.context.getThemeColor(R.attr.colorOnSecondary)
+                binding.root.setCardBackgroundColor(color)
+                binding.dayoffDate.setTextColor(textColor)
+                binding.dayoffName.setTextColor(textColor)
             }
         }
 

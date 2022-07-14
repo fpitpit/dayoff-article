@@ -3,7 +3,6 @@ package fr.pitdev.dayoff.common.coroutines
 import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainCoroutineDispatcher
 
 open class CoroutineDispatcherProvider {
     open val main: CoroutineDispatcher by lazy { Dispatchers.Main }

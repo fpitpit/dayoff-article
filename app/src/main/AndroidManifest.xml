@@ -3,15 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:allowBackup="true"
         android:name=".DayOffApplication"
+        android:allowBackup="true"
+        android:hasCode="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dayoff"
-        android:hasCode="true"
-        tools:replace="android:hasCode">
+        android:usesCleartextTraffic="false"
+        tools:replace="android:hasCode,android:allowBackup"
+        tools:targetApi="m">
         <activity
             android:name=".MainActivity"
             android:exported="true">
