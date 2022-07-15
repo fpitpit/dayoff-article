@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import fr.pitdev.dayoff.common.base.BaseFragment
@@ -24,6 +25,10 @@ class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
     private var _binding: FragmentDayoffsBinding? = null
     private val binding get() = _binding
 
+    private val swipeRefreshListener = SwipeRefreshLayout.OnRefreshListener {
+        dayOffsViewModel.refresh()
+        binding?.swiperefresh?.isRefreshing = false
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,17 +40,19 @@ class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         lifecycleScope.launch {
+            binding?.swiperefresh?.isRefreshing = false
+            binding?.swiperefresh?.setOnRefreshListener(swipeRefreshListener)
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                swipeRefreshListener.onRefresh()
                 dayOffsViewModel.uiStateAsFlow.collect {
                     bindView(it)
                 }
+
             }
         }
-        binding?.swiperefresh?.setOnRefreshListener {
-            dayOffsViewModel.refresh()
-            binding?.swiperefresh?.isRefreshing = false
-        }
+
     }
 
     private fun bindView(state: DayfOffsState) {
@@ -73,6 +80,7 @@ class DayOffsFragment : BaseFragment(R.layout.fragment_dayoffs) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding?.swiperefresh?.setOnRefreshListener(null)
         _binding = null
     }
 

@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/selector_dayoff"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
@@ -22,17 +23,20 @@
             android:layout_height="wrap_content"
             android:text="@null"
             android:textAppearance="?textAppearanceBody1"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Fête Nationale" />
+
         <TextView
             android:id="@+id/dayoff_date"
             android:layout_width="0dp"
-            android:paddingBottom="4dp"
             android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
             android:text="@null"
             android:textAppearance="?textAppearanceCaption"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
