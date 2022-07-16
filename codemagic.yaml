@@ -54,6 +54,7 @@ workflows:
           set -ex
           echo "[$CM_BRANCH]($BUILD_NUMBER)" >> release_notes.txt
           git shortlog >> release_notes.txt
+          git log -1 --pretty=%B >> release_notes.txt
           echo $CM_ARTIFACT_LINKS >> release_notes.txt
           cat release_notes.txt
 
@@ -118,8 +119,9 @@ workflows:
       - name: Run Firebase Test Lab tests
         script: |
           #!/bin/sh
+          #--results-bucket=tests-lab
           set -ex
-          echo $GCLOUD_KEY_FILE > ./gcloud_key_file.json
+          echo $GCLOUD_KEY_FILE | base64 --decode > ./gcloud_key_file.json
           gcloud auth activate-service-account --key-file=gcloud_key_file.json
           gcloud --quiet config set project $FIREBASE_PROJECT
           gcloud firebase test android run \
@@ -128,10 +130,10 @@ workflows:
             --test $FCI_BUILD_DIR/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
             --device model=oriole,version=31  \
             --device model=redfin,version=30 \
+            --device model=Nexus6,version=21 \
             --environment-variables coverage=true,coverageFile="/sdcard/coverage.ec" \
             --directories-to-pull /sdcard \
-            --timeout 3m \
-            --results-bucket=tests-lab
+            --timeout 3m
     publishing:
       slack:
         channel: '#general'
