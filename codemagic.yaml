@@ -39,15 +39,6 @@ workflows:
               --ks-pass $CM_KEYSTORE_PASSWORD \
               --ks-key-alias $CM_KEY_ALIAS \
               --key-pass $CM_KEY_PASSWORD
-      #- name: Create release notes
-      #  script: |
-      #    git log --format=%B -n 1 $(git describe --tags --abbrev=0) | tail -n +3 > release-notes.txt
-
-      #- name: upload to App Distribution
-      #  script: |
-      #    # Android Firebase App Distribution CLI
-      #    firebase appdistribution:distribute $FCI_BUILD_DIR/app/build/outputs/bundle/release/app-release-universal.apk --app 1:296353761044:android:5eda7133ce84672894a401 --groups "testeurs-release" --token "$FIREBASE_TOKEN" \
-      #    --release-notes-file "$CM_BUILD_DIR/release-notes.txt"
       - name: Write release notes
         script: |
           #!/bin/sh
