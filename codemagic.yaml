@@ -183,13 +183,6 @@ workflows:
       - '**/build/coverage-report'
       - build/reports/configuration-cache
     publishing:
-      email:
-        recipients:
-          - fpitoiset.pro@gmail.com
-          - fabrice.pitoiset@publicissapient.com
-        notify:
-          success: true
-          failure: true
       slack:
         channel: '#general'
         notify_on_build_start: true # To receive a notification when a build starts
